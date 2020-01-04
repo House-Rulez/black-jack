@@ -38,7 +38,9 @@ The MVP functinality will be to create a version of BlackJack that can be played
 * Provide a way with in the program for the user to see the rules of how to play.
 #
 ## **♠Functional Requirements:**
+####
+
+## **♥Non-Functional Requirements (301 & 401 only):**
 #### **Testing**
 This will probably more closely mirror the pattern that we used in the game of greed where we test the input and output with a varity of inputs by over riding the actual game functions for the I/O stream.
 
-## **♥Non-Functional Requirements (301 & 401 only):**
