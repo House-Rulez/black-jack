@@ -1,9 +1,9 @@
-**♠Vision:**
+## **♠Vision:**
 #
-#### What is the vision of this product?
+## What is the vision of this product?
     Our vision is to create a termial version of Black Jack as well as a cheater function that calculated yours scoring odds on a given hand.
 
-#### What pain point does this project solve?
+## What pain point does this project solve?
     This is a low risk enviorment to play Black Jack and see what type of scores you can reach. The Jupyter lab will be a way to see what sort out the matmatical probablity of being able to win on a given hand.
     
 #### Why should we care about your product?
