@@ -8,6 +8,8 @@
     
 #### Why should we care about your product?
     You shouldn't. Gambling is bad.
+    
+    But in all seriousness, it's an accessible, no stakes, easily operated version of a very well-known game.
 #
 ## **♥Scope (In/Out):**
 
@@ -25,7 +27,7 @@
 ## **♣Minimum viable product:**
 The MVP functinality will be to create a version of BlackJack that can be played in the terminal. There will be a partner program that will be able to calculate your odds of scoring on a given hand.
 * Create a commandline playable version of Black Jack that allows the user to play against the dealer
-* Keep track of the users points to see if they can cross a certain threshold before going bust (Start: 100, Gaol: 250)
+* Keep track of the users points to see if they can cross a certain threshold before going bust (Start: 100, Goal: 250)
 * Using Jupyter create a program that can calculate the odds you hav on your current hand for beating the dealer.
 
 ## **♦Stretch:**
