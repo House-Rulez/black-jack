@@ -110,3 +110,4 @@ Discuss on case by case basis
 
 
 ![Domain model:](/assets/domainmodel.jpg)
+![Wireframe:](/assets/wireframe.png)
