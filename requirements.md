@@ -1,15 +1,15 @@
 ## **♠Vision:**
 #
-## What is the vision of this product?
+#### What is the vision of this product?
     Our vision is to create a termial version of Black Jack as well as a cheater function that calculated yours scoring odds on a given hand.
 
-## What pain point does this project solve?
+#### What pain point does this project solve?
     This is a low risk enviorment to play Black Jack and see what type of scores you can reach. The Jupyter lab will be a way to see what sort out the matmatical probablity of being able to win on a given hand.
     
 #### Why should we care about your product?
     You shouldn't. Gambling is bad.
 #
-#### **♥Scope (In/Out):**
+## **♥Scope (In/Out):**
 
 #### IN - 
 * **Terminal:**
@@ -22,13 +22,13 @@
 * Online functionality. This app will be entirely offline
 * Desktop Only no application outs
   
-#### **♣Minimum viable product:**
+## **♣Minimum viable product:**
 The MVP functinality will be to create a version of BlackJack that can be played in the terminal. There will be a partner program that will be able to calculate your odds of scoring on a given hand.
 * Create a commandline playable version of Black Jack that allows the user to play against the dealer
 * Keep track of the users points to see if they can cross a certain threshold before going bust (Start: 100, Gaol: 250)
 * Using Jupyter create a program that can calculate the odds you hav on your current hand for beating the dealer.
 
-#### **♦Stretch:**
+## **♦Stretch:**
 * Be able to hot reload you stats in the Jupyter notebook
 * Allows multiple players to play at the same time
 * Create Bots to play along side you that will try to also beat the dealer
@@ -37,8 +37,8 @@ The MVP functinality will be to create a version of BlackJack that can be played
 * Allow for more complicated rules to the game like `Double Downs` and `Hand Splits`
 * Provide a way with in the program for the user to see the rules of how to play.
 #
-#### **♠Functional Requirements:**
+## **♠Functional Requirements:**
 ## **Testing**
 This will probably more closely mirror the pattern that we used in the game of greed where we test the input and output with a varity of inputs by over riding the actual game functions for the I/O stream.
 
-#### **♥Non-Functional Requirements (301 & 401 only):**
+## **♥Non-Functional Requirements (301 & 401 only):**
