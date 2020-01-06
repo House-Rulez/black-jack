@@ -3,6 +3,9 @@ import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../scripts/player/')
 
+###########################################
+## Import the classes from the card file ##
+###########################################
 
 from hand import Hand
 
@@ -11,3 +14,4 @@ def test_import():
 
 def test_hand_instance():
   assert Hand()
+
