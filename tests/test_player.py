@@ -5,3 +5,9 @@ sys.path.insert(0, myPath + '/../scripts/player/')
 
 
 from player import Player
+
+def test_import():
+  assert Player
+
+def test_player_instance():
+  assert Player()

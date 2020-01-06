@@ -6,6 +6,12 @@ sys.path.insert(0, myPath + '/../scripts/')
 
 from game import Game
 
+def test_import():
+  assert Game
 
 def test_game_instance():
   assert Game()
+
+# def test_round_start():
+#   game = Game()
+#   assert game.play()

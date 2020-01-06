@@ -6,3 +6,8 @@ sys.path.insert(0, myPath + '/../scripts/player/')
 
 from hand import Hand
 
+def test_import():
+  assert Hand
+
+def test_hand_instance():
+  assert Hand()
