@@ -27,7 +27,7 @@ class Card:
         name = 'King'
       return(10, name)
 
-    return (value, str('value'))
+    return (value, str(value))
 
 
 class Spade(Card):

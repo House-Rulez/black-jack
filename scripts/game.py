@@ -36,7 +36,6 @@ class Game:
     else:
       print('Okay, come again!')
 
-
   def iterate_round(self):
     self.round += 1
 
@@ -67,13 +66,17 @@ class Game:
 
       if re.match(r'[0-9]+', player_bet):
         player_bet = int(player_bet)
+
         if player_bet > 1 and player_bet <= current_bank:
           self.user.place_bet(player_bet)
           break
+
         elif player_bet == 0:
           print('Please enter a valid bet')
+
         else:
           print('Bet is over current bank')
+
       else:
         print('Please enter an integer')
           

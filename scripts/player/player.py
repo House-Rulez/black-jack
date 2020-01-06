@@ -9,7 +9,7 @@ class Player:
     self.hand.add_card(card)
 
   def get_score(self):
-    return hand.score()
+    return self.hand.score()
 
   def bust(self):
     return self.get_score() > 21
