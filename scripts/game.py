@@ -1,4 +1,4 @@
-import re 
+import re
 from deck.deck import Deck
 from player.player import User, Dealer
 
@@ -79,7 +79,7 @@ class Game:
 
       else:
         print('Please enter an integer')
-          
+
 
 if __name__ == "__main__":
 	"""The code that starts the game"""
