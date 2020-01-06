@@ -1,6 +1,12 @@
+# https://stackoverflow.com/questions/10253826/path-issue-with-pytest-importerror-no-module-named-yadayadayada
+import sys, os
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/./deck/')
+sys.path.insert(1, myPath + '/./player/')
+
 import re
-from deck.deck import Deck
-from player.player import User, Dealer
+from deck import Deck
+from player import User, Dealer
 
 class Game:
   def __init__(self, print_func=print, input_func=input):

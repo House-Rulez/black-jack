@@ -1,7 +1,14 @@
+# https://stackoverflow.com/questions/10253826/path-issue-with-pytest-importerror-no-module-named-yadayadayada
+import sys, os
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/./')
+
 from collections import deque
 from random import randint
 
-from .card import Spade, Heart, Diamond, Club
+
+from card import Spade, Heart, Diamond, Club
+
 
 
 class Deck:
