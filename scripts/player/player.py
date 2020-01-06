@@ -1,4 +1,4 @@
-from .hand import Hand
+from hand import Hand
 
 class Player:
   def __init__(self):
@@ -9,7 +9,7 @@ class Player:
     self.hand.add_card(card)
 
   def get_score(self):
-    return hand.score()
+    return self.hand.score()
 
   def bust(self):
     return self.get_score() > 21
@@ -39,4 +39,4 @@ class User(Player):
     if win:
       self.bank += self.bet
     else:
-      self.bank -= self.bet     
+      self.bank -= self.bet
