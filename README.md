@@ -107,3 +107,7 @@ Discuss on case by case basis
 #### [Trello Board](https://trello.com/b/GBYtcFxG/blackjack)
 
 #### [Google Doc](https://docs.google.com/document/d/1MsAQbo9l4u5pcKuBOXa4_OYER_faoInqs7lUpxe7MHo/edit?usp=sharing)
+
+
+![Domain model:](/assets/domainmodel.jpg)
+![Wireframe:](/assets/wireframe.png)
