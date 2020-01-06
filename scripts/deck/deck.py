@@ -16,10 +16,10 @@ class Deck:
   Reshuffles Deck
 
   deal():
-  Returns card instance
+  Returns card instence
 
   cards_remaining():
-  Returns # of cards that haven't been dealt
+  Returns # of cards that havn't been delt
 
   deck_size():
   Returns the total # of cards
@@ -27,8 +27,8 @@ class Deck:
 
   def __init__(self, deck_count = 2):
     self.deck_count = deck_count
-    self.cards_dealt = 0
-    # Creates an instance of a list for the creating of a new deck. Will later be reassigned to a queue to play with instead
+    self.cards_delt = 0
+    # Creates an instencce of a list for the creating of a new deck. Will later be reassigned to a queue to play with instead
     self.deck = []
 
     # Populate the Deck and shuffle the cards the deck should now be a Queue
@@ -74,12 +74,12 @@ class Deck:
   def _create_deck(self):
     """
     **Do Not Use Outside Class**
-    Takes in no input into the function and creates an instance of each card type between 1 and 13
+    Takes in no input into the function and creates an instence of each card type between 1 and 13
     In: Empty list
     Exceptions: None
     Out: List with
     """
-    # We are using 2 decks so %13+1 will keep the cards in range
+    # We are useing 2 decks so %13+1 will keep the cards in range
     for i in range(0, (13 * self.deck_count)):
       card_value = (i % 13) + 1
       self.deck.append(Spade(card_value))
@@ -90,7 +90,7 @@ class Deck:
 
   def shuffle(self):
     """
-    Can work with either a list or a queue. Convert the deck to a list. Randomly selects a card from the deck and adds it to the Queue
+    Can Work with either a list or a queue. Converst the deck to a list. Randomly selects a card from the deck and adds it to the Queue
     In: the deck as either a List or Queue
     Exceptions: None
     Out: Reassign the deck to be a Queue
@@ -98,7 +98,7 @@ class Deck:
     if not isinstance(self.deck, list):
       self._to_list()
 
-    self.cards_dealt = 0
+    self.cards_delt = 0
 
     q = self.Queue()
     while len(self.deck) > 0:
@@ -129,27 +129,27 @@ class Deck:
     """
 
     In: None
-    Exceptions: If all cards have been dealt with out shuffling raise Error
-    Out: An instance of a card
+    Exceptions: If all cards have been delt with out shuffling raise Error
+    Out: An instence of a card
     """
 
     if self.cards_remaining() == 0:
       raise EmptyDeckError
 
     card = self.deck.dequeue()
-    self.cards_dealt += 1
+    self.cards_delt += 1
 
-    # The way the deck is set up it would slowly break the game to lose a card each time it's dealt instead the number of cards dealt is saved instead
+    # The way the deck is set up it would slowly break the game to loose a card each time it's delt instead the number of cards delt is saved instead
     self.deck.enqueue(card)
     return card
 
 
   def cards_remaining(self):
     """
-    Used to tell you how many cards in the have yet to be dealt
+    Used to tell you how many cards in the have yet to be delt
     In: None
     Exceptions: None
-    Out: Number of cards that haven't been dealt yet
+    Out: Number of cards that havn't been delt yet
     """
     return (52 * self.deck_count) - self.cards_remaining
 
@@ -159,7 +159,7 @@ class Deck:
     Tells you the size of the entire deck the game is played with
     In: None
     Exceptions: None
-    Out: Number of cards that haven't been dealt yet
+    Out: Number of cards that havn't been delt yet
     """
     return len(self.deck)
 
