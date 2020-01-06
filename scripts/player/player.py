@@ -1,6 +1,6 @@
-from hand import Hand
 
 class Player:
+
   def __init__(self):
     self.hand = []
 
@@ -13,7 +13,7 @@ class Player:
     Exceptions: None
     Out: None
     """
-    self.cards.append(card)
+    self.hand.append(card)
 
 
   def get_score(self):
@@ -22,12 +22,12 @@ class Player:
     Exceptions: Empty Hand Raises Error
     Out: Current Score of the players hand
     """
-    if len(self.cards) == 0:
+    if len(self.hand) == 0:
       raise EmptyHandError
 
     score = 0
     aces = 0
-    for card in self.cards:
+    for card in self.hand:
       if card.name == 'Ace':
         aces += 1
       else:
@@ -79,7 +79,7 @@ class User(Player):
       self.bank += self.bet
     else:
       self.bank -= self.bet
-      
+
 
 ###################
 ## Unique Errors ##
