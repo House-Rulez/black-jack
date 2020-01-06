@@ -8,7 +8,7 @@ class Card:
     """
     Takes in an int Value and returns the value of the card represents in the game as well as the name of the card as a string
     In: Int value
-    Exceptions: If Greater the 13 will raise a value error
+    Exceptions: If Greater than 13 will raise a value error
     Out: (Value of card, String name of card)
     """
     if value > 13:

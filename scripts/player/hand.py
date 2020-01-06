@@ -31,7 +31,6 @@ class Hand:
 
     return score
 
-
   def add_card(self, card):
     """
     Takes in a card and adds it to the players hand
