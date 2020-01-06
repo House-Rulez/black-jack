@@ -1,6 +1,7 @@
 import csv
 import random
 
+
 def make_deck(hands):
   points = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10, 11]
   cards = []
@@ -13,6 +14,7 @@ def make_deck(hands):
 
   return cards
 
+
 def make_deal(cards=[]):
   if cards:
     return cards
@@ -23,22 +25,23 @@ def make_deal(cards=[]):
   return cards
 
 
-
 def make_file(contents, filename):
 
   with open(filename, mode="w") as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
+    if filename == 'notebooks/deck.csv':
+      csv_writer.writerow(['Points'])
+    elif filename == 'notebooks/hand.csv':
+      csv_writer.writerow(['Points'])
+
     for content in contents:
       csv_writer.writerow([str(content)])
+
 
 if __name__ == "__main__":
   cards = make_deal()
   hand = cards[:2]
   deck = make_deck(cards)
-  make_file(hand, 'hand.csv')
-  make_file(deck, 'deck.csv')
-
-
-
-
+  make_file(hand, 'notebooks/hand.csv')
+  make_file(deck, 'notebooks/deck.csv')
