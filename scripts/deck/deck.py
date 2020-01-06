@@ -1,7 +1,7 @@
 from collections import deque
 from random import randint
 
-from card import Spade, Heart, Diamond, Club
+from .card import Spade, Heart, Diamond, Club
 
 
 class Deck:
