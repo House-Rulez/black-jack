@@ -32,4 +32,10 @@ def test_face_card():
   assert queen.name == 'Queen'
 
 
+def test_number_card():
+  nine = Club(9)
+  assert isinstance(nine, (Card, Club))
+  assert nine.value == 9
+  assert nine.name == '9'
+
 
