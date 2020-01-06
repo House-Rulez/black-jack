@@ -2,7 +2,7 @@ class Hand:
   def __init__(self):
     self.cards = []
 
-  # Calcualte Score
+  # Calculate Score
   def socre(self):
     pass
 

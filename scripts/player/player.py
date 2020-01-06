@@ -1,4 +1,4 @@
-from .hand import Hand
+from hand import Hand
 
 class Player:
   def __init__(self):
@@ -39,4 +39,4 @@ class User(Player):
     if win:
       self.bank += self.bet
     else:
-      self.bank -= self.bet     
+      self.bank -= self.bet
