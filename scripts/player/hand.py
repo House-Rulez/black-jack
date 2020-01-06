@@ -1,2 +1,7 @@
 class Hand:
-  pass
+  def __init__(self):
+    pass
+
+  # Calcualte Score
+
+  # Keep Current Hand
