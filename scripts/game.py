@@ -43,12 +43,27 @@ class Game:
       print('Okay, come again!')
 
   def iterate_round(self):
+    """
+    Keeps track of round number
+    In: None
+    Out: None
+    """
     self.round += 1
 
   def shuffle_deck(self):
+    """
+    Shuffles decks of cards
+    In: None
+    Out: None
+    """
     self.deck.shuffle()
 
   def turn(self):
+    """
+    Runs through a turn of the game
+    In: None
+    Out: None
+    """
     self.place_user_bet()
     self.deal()
     self.user_turn()
@@ -74,6 +89,11 @@ class Game:
 
 
   def place_user_bet(self):
+    """
+    Shows current bank, requests bet, handles edge cases
+    In: None
+    Out: None
+    """
     current_bank = self.user.get_bank()
 
     while True:
@@ -99,12 +119,22 @@ class Game:
 
 
   def deal(self):
+    """
+    Deals 2 cards each for user and dealer
+    In: None
+    Out: None
+    """
     for i in range(0, 2):
       self.user.hit(self.deck.deal())
       self.dealer.hit(self.deck.deal())
 
 
   def user_turn(self):
+    """
+    Handles user turn
+    In: None
+    Out: None
+    """
     while not self.user.bust():
       print(f'The Dealer shows {repr(self.dealer)}')
       print(str(self.user))
@@ -118,13 +148,23 @@ class Game:
         print('invalid input')
 
   def dealer_turn(self):
+    """
+    Handles dealer turn
+    In: None
+    Out: None
+    """
     while not self.dealer.bust():
       if self.dealer.get_score() < 17 :
         self.dealer.hit(self.deck.deal())
       else:
-        break 
+        break
 
   def reset_hands(self):
+    """
+    Resets hands of all players to no cards
+    In: None
+    Out: None
+    """
     self.user.reset_hand()
     self.dealer.reset_hand()
 
