@@ -39,8 +39,10 @@ class Game:
     if response == 'y':
       while self.user.get_bank() > 0 and self.user.get_bank() < 250:
         self.turn()
+        if self.deck.deck_size() / 4 > self.deck.cards_remaining():
+          self.deck.shuffle()
     else:
-      print('Okay, come again!')
+      self._print('Okay, come again!')
 
   def iterate_round(self):
     """
@@ -67,25 +69,14 @@ class Game:
     self.place_user_bet()
     self.deal()
     self.user_turn()
-    if self.user.bust():
-      print(f'Your score is {self.user.get_score()}')
-      print('You have bust')
-      self.user.beat_dealer(False)
-    else:
-      self.dealer_turn()
-      print('The Dealer\'s hand: ')
-      print(str(self.dealer))
-      print(f'Dealer has {self.dealer.get_score()} points')
-      result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()
-      self.user.beat_dealer(result)
-      if self.dealer.bust():
-        print('The Dealer bust')
-      if result:
-        print('You beat the Dealer')
-      else:
-        print('You lost this hand')
+    # Should be refactored into it's own function
+
+    self.calculate_winner()
+
+    # Clear out the cards in each player's hand
+    # Only re-shuffle when the deck is has less then 1/4 of it's cards
+
     self.reset_hands()
-    self.deck.shuffle()
 
 
   def place_user_bet(self):
@@ -97,9 +88,9 @@ class Game:
     current_bank = self.user.get_bank()
 
     while True:
-      print(f'Your current bank is {current_bank}')
-      print('how much would you like to bet?')
-      player_bet = input('Bet: ')
+      self._print(f'Your current bank is {current_bank}')
+      self._print('how much would you like to bet?')
+      player_bet = self._input('Bet: ')
 
       if re.match(r'[0-9]+', player_bet):
         player_bet = int(player_bet)
@@ -109,10 +100,10 @@ class Game:
           break
 
         elif player_bet == 0:
-          print('Please enter a valid bet')
+          self._print('Please enter a valid bet')
 
         else:
-          print('Bet is over current bank')
+          self._print('Bet is over current bank')
 
       else:
         print('Please enter an integer')
@@ -137,16 +128,16 @@ class Game:
     """
     while not self.user.bust():
       self.save_game()
-      print(f'The Dealer shows {repr(self.dealer)}')
-      print(str(self.user))
-      print('Your current score is ', self.user.get_score())
-      hit_or_stay_input = input('Would you like to hit or stay? (h/s): ')
+      self._print(f'The Dealer shows {repr(self.dealer)}')
+      self._print(str(self.user))
+      self._print('Your current score is ', self.user.get_score())
+      hit_or_stay_input = self._input('Would you like to hit or stay? (h/s): ')
       if hit_or_stay_input == 's':
         break
       elif hit_or_stay_input == 'h':
         self.user.hit(self.deck.deal())
       else:
-        print('invalid input')
+        self._print('invalid input')
 
   def dealer_turn(self):
     """
@@ -160,6 +151,30 @@ class Game:
       else:
         break
 
+
+  def calculate_winner(self):
+    if self.user.bust():
+      self._print(f'Your score is {self.user.get_score()}')
+      self._print('You have bust')
+      self.user.beat_dealer(False)
+    else:
+      self.dealer_turn()
+      self._print('The Dealer\'s hand: ')
+      self._print(str(self.dealer))
+      self._print(f'Dealer has {self.dealer.get_score()} points')
+      if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
+        self._print(f'It was a tie\nYou don\'t gain or loose points')
+        return
+      result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()
+      self.user.beat_dealer(result)
+      if self.dealer.bust():
+        self._print('The Dealer bust')
+      if result:
+        self._print('You beat the Dealer')
+      else:
+        self._print('You lost this hand')
+
+
   def reset_hands(self):
     """
     Resets hands of all players to no cards
@@ -168,6 +183,7 @@ class Game:
     """
     self.user.reset_hand()
     self.dealer.reset_hand()
+
 
   def save_game(self):
     """
