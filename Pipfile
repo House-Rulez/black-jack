@@ -7,7 +7,10 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-pytest = "*"
+jupyter = "*"
+pandas = "*"
+matplotlib = "*"
+jupyterlab = "*"
 
 [requires]
-python_version = "3"
+python_version = "3.7"
