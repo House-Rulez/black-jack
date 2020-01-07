@@ -31,6 +31,9 @@ class Deck:
 
   deck_size():
   Returns the total # of cards
+
+  to_csv()
+  Writes a deck.csv file for the stats page to use in calculating odds
   """
 
   def __init__(self, deck_count = 2):
@@ -85,7 +88,7 @@ class Deck:
     Takes in no input into the function and creates an instance of each card type between 1 and 13
     In: Empty list
     Exceptions: None
-    Out: List with
+    Out: Creates a list x number of decks inside
     """
     # We are useing 2 decks so %13+1 will keep the cards in range
     for i in range(0, (13 * self.deck_count)):
@@ -135,7 +138,7 @@ class Deck:
 
   def deal(self):
     """
-
+    Takes the first card off the top to the deck and returns it to the game.
     In: None
     Exceptions: If all cards have been dealt with out shuffling raise Error
     Out: An instance of a card
@@ -171,7 +174,14 @@ class Deck:
     """
     return len(self.deck)
 
+
   def to_csv(self):
+    """
+    Saves part of the deck that hasn't been played yet to a csv file
+    In: None
+    Exception: If there is an error the game will ignore and continue to play but won't write to the file
+    Out: csv of card values
+    """
 
     def cycle(self):
       card = self.deck.dequeue()
@@ -179,15 +189,18 @@ class Deck:
       return card
 
     file_path = './notebooks/deck.csv'
-    with open(file_path, mode="w") as csv_file:
-      csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-      csv_writer.writerow(['Points'])
+    try:
+      with open(file_path, mode="w") as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerow(['Points'])
 
-      cards_remaining = self.cards_remaining()
-      for card in range(0, self.deck_size()):
-        current = cycle(self)
-        if card < cards_remaining:
-          csv_writer.writerow([current.get_value()])
+        cards_remaining = self.cards_remaining()
+        for card in range(0, self.deck_size()):
+          current = cycle(self)
+          if card < cards_remaining:
+            csv_writer.writerow([current.get_value()])
+    except FileNotFoundError:
+      print('**File Not Saved**')
 
 ###################
 ## Unique Errors ##
