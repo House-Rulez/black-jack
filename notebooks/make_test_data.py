@@ -40,7 +40,7 @@ def make_file(contents, filename):
 
 
 if __name__ == "__main__":
-  cards = make_deal()
+  cards = make_deal([2, 8, 10, 3])
   hand = cards[:2]
   deck = make_deck(cards)
   make_file(hand, 'notebooks/hand.csv')
