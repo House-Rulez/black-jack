@@ -1,10 +1,14 @@
 class Card:
   """"""
   def __init__(self, value):
+    self.suit = None
     self.value, self.name = Card.card_values(value)
 
   def __str__(self):
     return f'{self.name} of {self.suit}'
+
+  def get_value(self):
+    return self.value
 
   @staticmethod
   def card_values(value):
@@ -14,7 +18,7 @@ class Card:
     Exceptions: If Greater than 13 will raise a value error
     Out: (Value of card, String name of card)
     """
-    if value > 13:
+    if value > 13 or value < 1:
       raise ValueError
 
     if value == 1:
@@ -35,23 +39,23 @@ class Card:
 
 class Spade(Card):
   def __init__(self, value):
-    self.suit = 'Spades'
     super(Spade, self).__init__(value)
+    self.suit = 'Spades'
 
 
 class Heart(Card):
   def __init__(self, value):
-    self.suit = 'Hearts'
     super(Heart, self).__init__(value)
+    self.suit = 'Hearts'
 
 
 class Diamond(Card):
   def __init__(self, value):
-    self.suit = 'Diamonds'
     super(Diamond, self).__init__(value)
+    self.suit = 'Diamonds'
 
 
 class Club(Card):
   def __init__(self, value):
-    self.suit = 'Clubs'
     super(Club, self).__init__(value)
+    self.suit = 'Clubs'

@@ -3,6 +3,7 @@ import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/./')
 
+import csv
 from collections import deque
 from random import randint
 
@@ -105,7 +106,7 @@ class Deck:
     if not isinstance(self.deck, list):
       self._to_list()
 
-    self.cards_delt = 0
+    self.cards_dealt = 0
 
     q = self.Queue()
     while len(self.deck) > 0:
@@ -156,9 +157,9 @@ class Deck:
     Used to tell you how many cards in the have yet to be dealt
     In: None
     Exceptions: None
-    Out: Number of cards that haven't been delt yet
+    Out: Number of cards that haven't been dealt yet
     """
-    return (52 * self.deck_count) - self.cards_delt
+    return (52 * self.deck_count) - self.cards_dealt
 
 
   def deck_size(self):
@@ -169,6 +170,9 @@ class Deck:
     Out: Number of cards that haven't been dealt yet
     """
     return len(self.deck)
+
+  def to_csv(self):
+    pass
 
 ###################
 ## Unique Errors ##
