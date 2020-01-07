@@ -172,7 +172,22 @@ class Deck:
     return len(self.deck)
 
   def to_csv(self):
-    pass
+
+    def cycle(self):
+      card = self.deck.dequeue()
+      self.deck.enqueue(card)
+      return card
+
+    file_path = './notebooks/deck.csv'
+    with open(file_path, mode="w") as csv_file:
+      csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+      csv_writer.writerow(['Points'])
+
+      cards_remaining = self.cards_remaining()
+      for card in range(0, self.deck_size()):
+        current = cycle(self)
+        if card < cards_remaining:
+          csv_writer.writerow([current.get_value()])
 
 ###################
 ## Unique Errors ##
