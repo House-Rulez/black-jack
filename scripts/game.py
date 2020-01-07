@@ -136,6 +136,7 @@ class Game:
     Out: None
     """
     while not self.user.bust():
+      self.save_game()
       print(f'The Dealer shows {repr(self.dealer)}')
       print(str(self.user))
       print('Your current score is ', self.user.get_score())
@@ -175,7 +176,8 @@ class Game:
     Exceptions: No Data To Save
     Out: .csv files
     """
-    # Call the other to csv functions
+    self.user.to_csv()
+    self.deck.to_csv()
 
 
 if __name__ == "__main__":
