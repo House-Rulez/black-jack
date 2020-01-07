@@ -84,6 +84,38 @@ def test_score_player_4_cards(test_input_1, test_input_2, test_input_3, test_inp
   user.hit(test_input_4)
   assert user.get_score() == expected
 
+@pytest.mark.parametrize("test_input_1, test_input_2, test_input_3, test_input_4, expected",
+[(Card(10), Card(3), Card(5), Card(7), True),
+(Card(6), Card(5), Card(9), Card(1), False),
+(Card(10), Card(1), Card(5), Card(6), True)])
+def test_user_bust(test_input_1, test_input_2, test_input_3, test_input_4, expected, user):
+  user.hit(test_input_1)
+  user.hit(test_input_2)
+  user.hit(test_input_3)
+  user.hit(test_input_4)
+  assert user.bust() == expected
+
+@pytest.mark.parametrize("test_input_1, test_input_2,expected",
+[(Card(10), Card(11), True and len(User().hand) == 2),
+(Card(10), Card(10), False and len(User().hand) == 2)])
+def test_user_blackjack(test_input_1, test_input_2,expected, user):
+  user.hit(test_input_1)
+  user.hit(test_input_2)
+  assert user.blackjack() == expected
+
+def test_user_reset_hand(user):
+  assert user.reset_hand() == None
+
+def test_get_bank(user):
+  user.bank = 100
+  actual = user.get_bank()
+  assert user.bank == actual
+
+def test_get_bet_and_place_bet(user):
+  user.place_bet(100)
+  actual = user.get_bet()
+  assert user.bank == actual
+
 #Dealer Tests
 @pytest.mark.parametrize("test_input_1, test_input_2, expected",
 [(Card(10), Card(1), 21),
@@ -117,3 +149,24 @@ def test_score_dealer_4_cards(test_input_1, test_input_2, test_input_3, test_inp
   dealer.hit(test_input_4)
   assert dealer.get_score() == expected
 
+@pytest.mark.parametrize("test_input_1, test_input_2, test_input_3, test_input_4, expected",
+[(Card(10), Card(3), Card(5), Card(7), True),
+(Card(6), Card(5), Card(9), Card(1), False),
+(Card(10), Card(1), Card(5), Card(6), True)])
+def test_dealer_bust(test_input_1, test_input_2, test_input_3, test_input_4, expected, dealer):
+  dealer.hit(test_input_1)
+  dealer.hit(test_input_2)
+  dealer.hit(test_input_3)
+  dealer.hit(test_input_4)
+  assert dealer.bust() == expected
+
+@pytest.mark.parametrize("test_input_1, test_input_2,expected",
+[(Card(10), Card(11), True and len(User().hand) == 2),
+(Card(10), Card(10), False and len(User().hand) == 2)])
+def test_dealer_blackjack(test_input_1, test_input_2,expected, dealer):
+  dealer.hit(test_input_1)
+  dealer.hit(test_input_2)
+  assert dealer.blackjack() == expected
+
+def test_user_reset_hand(dealer):
+  assert dealer.reset_hand() == None
