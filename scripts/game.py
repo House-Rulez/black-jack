@@ -30,8 +30,8 @@ class Game:
     Exceptions: None
     Out:
     """
-    self._print('*' * 122)
-    self._print('*' * 50 + 'Welcome to Black Jack!' + '*' * 50)
+    # self._print('*' * 122)
+    self._print('Welcome to Black Jack!')
     self._print('*' * 122)
     self._print('You start off with 100 chips. Try to make it to 250 chips by beating the dealer\'s cards.')
     response = self._input('Would you like to play?: y/n ')
