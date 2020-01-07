@@ -25,6 +25,13 @@ def make_deal(cards=[]):
   return cards
 
 
+def make_hit(card, cards, deck):
+  if card in deck:
+    cards.append(card)
+    deck.remove(card)
+    return cards
+
+
 def make_file(contents, filename):
 
   with open(filename, mode="w") as csv_file:
@@ -40,7 +47,23 @@ def make_file(contents, filename):
 
 
 if __name__ == "__main__":
+  # Round 1
   cards = make_deal([2, 8, 10, 3])
+  hand = cards[:2]
+  deck = make_deck(cards)
+  make_file(hand, 'notebooks/hand.csv')
+  make_file(deck, 'notebooks/deck.csv')
+
+  hand = make_hit(5, hand, deck)
+  make_file(hand, 'notebooks/hand.csv')
+  make_file(deck, 'notebooks/deck.csv')
+
+  hand = make_hit(4, hand, deck)
+  make_file(hand, 'notebooks/hand.csv')
+  make_file(deck, 'notebooks/deck.csv')
+
+  # Round 2
+  cards = make_deal([11, 4, 9, 9])
   hand = cards[:2]
   deck = make_deck(cards)
   make_file(hand, 'notebooks/hand.csv')
