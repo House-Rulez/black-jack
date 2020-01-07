@@ -37,7 +37,7 @@ class Game:
     response = self._input('Would you like to play?: y/n ')
 
     if response == 'y':
-      while True:
+      while self.user.get_bank() > 0 and self.user.get_bank() < 250:
         self.turn()
     else:
       print('Okay, come again!')
@@ -124,7 +124,7 @@ class Game:
     In: None
     Out: None
     """
-    for i in range(0, 2):
+    for _ in range(0, 2):
       self.user.hit(self.deck.deal())
       self.dealer.hit(self.deck.deal())
 
@@ -136,6 +136,7 @@ class Game:
     Out: None
     """
     while not self.user.bust():
+      self.save_game()
       print(f'The Dealer shows {repr(self.dealer)}')
       print(str(self.user))
       print('Your current score is ', self.user.get_score())
@@ -167,6 +168,16 @@ class Game:
     """
     self.user.reset_hand()
     self.dealer.reset_hand()
+
+  def save_game(self):
+    """
+    Description
+    In: None
+    Exceptions: No Data To Save
+    Out: .csv files
+    """
+    self.user.to_csv()
+    self.deck.to_csv()
 
 
 if __name__ == "__main__":

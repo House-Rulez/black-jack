@@ -1,3 +1,4 @@
+import csv
 
 class Player:
 
@@ -7,7 +8,6 @@ class Player:
 
 
   def hit(self, card):
-    # Add new card to their hand
     """
     Takes in a card and adds it to the players hand
     In: Card instance
@@ -75,7 +75,7 @@ class Player:
     In: None
     Out: True / False
     """
-    if self.get_score() > 21:
+    if not self._bust and self.get_score() > 21:
       self._bust = True
     return self._bust
 
@@ -161,6 +161,15 @@ class User(Player):
     else:
       self.bank -= self.bet
 
+
+  def to_csv(self):
+    file_path = './notebooks/hand.csv'
+    with open(file_path, mode="w") as csv_file:
+      csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+      csv_writer.writerow(['Points'])
+
+      for card in self.hand:
+        csv_writer.writerow([card.get_value()])
 
 ###################
 ## Unique Errors ##
