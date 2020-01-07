@@ -14,10 +14,10 @@ class PlayButton(TextButton):
 
     def on_release(self):
         if self.pressed:
-          arcade.close_window()
+
           self.game.pause = False
           self.pressed = False
-
+          arcade.close_window()
 
 
 class ExitButton(TextButton):
