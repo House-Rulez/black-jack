@@ -50,17 +50,28 @@ class Game:
 
   def turn(self):
     self.place_user_bet()
+    self.deal()
+    self.user_turn()
+    if self.user.bust():
+      print(f'Your score is {self.user.get_score()}')
+      print('You have bust')
+      self.user.beat_dealer(False)
+    else:
+      self.dealer_turn()
+      print('The Dealer\'s hand: ')
+      print(str(self.dealer))
+      print(f'Dealer has {self.dealer.get_score()} points')
+      result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()
+      self.user.beat_dealer(result)
+      if self.dealer.bust():
+        print('The Dealer bust')
+      if result:
+        print('You beat the Dealer')
+      else:
+        print('You lost this hand')
+    self.reset_hands()
+    self.deck.shuffle()
 
-    hit_or_stay_input = self._input(f'Round {self.round}: Here are your cards: *visual or string representation of cards*. Here are my Cards: *cards with one face down*-  Do you want to hit or stay?: h/s ')
-
-    while True:
-
-      if hit_or_stay_input == 'h':
-        response = self._input(f'**Show card here** Your total is total is **card points here**. Hit or stay?: h/s ')
-
-      if hit_or_stay_input == 's':
-        self._print(f'Your total is {self.card_points}')
-        break
 
   def place_user_bet(self):
     current_bank = self.user.get_bank()
@@ -73,7 +84,7 @@ class Game:
       if re.match(r'[0-9]+', player_bet):
         player_bet = int(player_bet)
 
-        if player_bet > 1 and player_bet <= current_bank:
+        if player_bet >= 1 and player_bet <= current_bank:
           self.user.place_bet(player_bet)
           break
 
@@ -85,6 +96,37 @@ class Game:
 
       else:
         print('Please enter an integer')
+
+
+  def deal(self):
+    for i in range(0, 2):
+      self.user.hit(self.deck.deal())
+      self.dealer.hit(self.deck.deal())
+
+
+  def user_turn(self):
+    while not self.user.bust():
+      print(f'The Dealer shows {repr(self.dealer)}')
+      print(str(self.user))
+      print('Your current score is ', self.user.get_score())
+      hit_or_stay_input = input('Would you like to hit or stay? (h/s): ')
+      if hit_or_stay_input == 's':
+        break
+      elif hit_or_stay_input == 'h':
+        self.user.hit(self.deck.deal())
+      else:
+        print('invalid input')
+
+  def dealer_turn(self):
+    while not self.dealer.bust():
+      if self.dealer.get_score() < 17 :
+        self.dealer.hit(self.deck.deal())
+      else:
+        break 
+
+  def reset_hands(self):
+    self.user.reset_hand()
+    self.dealer.reset_hand()
 
 
 if __name__ == "__main__":

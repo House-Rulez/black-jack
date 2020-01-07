@@ -158,7 +158,7 @@ class Deck:
     Exceptions: None
     Out: Number of cards that havn't been delt yet
     """
-    return (52 * self.deck_count) - self.cards_remaining
+    return (52 * self.deck_count) - self.cards_delt
 
 
   def deck_size(self):
