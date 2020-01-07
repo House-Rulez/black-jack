@@ -3,6 +3,7 @@ class Player:
 
   def __init__(self):
     self.hand = []
+    self._bust = False
 
 
   def hit(self, card):
@@ -15,6 +16,14 @@ class Player:
     """
     self.hand.append(card)
 
+
+  def __str__(self):
+    output = '['
+    for card in self.hand:
+      if not output == '[':
+        output += ', '
+      output += str(card) 
+    return output + ']'
 
   def get_score(self):
     """
@@ -44,13 +53,33 @@ class Player:
 
     return score
 
+  
+  def blackjack(self):
+    return len(self.hand) == 2 and self.get_score() == 21
+
 
   def bust(self):
-    return self.get_score() > 21
+    if self.get_score() > 21:
+      self._bust = True
+    return self._bust
+
+
+  def reset_hand(self):
+    self.hand = []
+    self._bust = False
+
 
 class Dealer(Player):
   def __init__(self):
     super(Dealer, self).__init__()
+
+  def __repr__(self):
+    output = '['
+    for i in range(1 ,len(self.hand)):
+      if output == '[':
+        output += '**********, '
+      output += str(self.hand[i]) 
+    return output + ']'
 
 
 class User(Player):

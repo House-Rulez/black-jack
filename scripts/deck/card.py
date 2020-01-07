@@ -3,6 +3,9 @@ class Card:
   def __init__(self, value):
     self.value, self.name = Card.card_values(value)
 
+  def __str__(self):
+    return f'{self.name} of {self.suit}'
+
   @staticmethod
   def card_values(value):
     """
@@ -32,23 +35,23 @@ class Card:
 
 class Spade(Card):
   def __init__(self, value):
-    self.suit = 'Spade'
+    self.suit = 'Spades'
     super(Spade, self).__init__(value)
 
 
 class Heart(Card):
   def __init__(self, value):
-    self.suit = 'Heart'
+    self.suit = 'Hearts'
     super(Heart, self).__init__(value)
 
 
 class Diamond(Card):
   def __init__(self, value):
-    self.suit = 'Diamond'
+    self.suit = 'Diamonds'
     super(Diamond, self).__init__(value)
 
 
 class Club(Card):
   def __init__(self, value):
-    self.suit = 'Club'
+    self.suit = 'Clubs'
     super(Club, self).__init__(value)
