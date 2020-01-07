@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6211b837daa32db976f1dac8bf500c3202ffee20565fda0578e1d6b1c372008e"
+            "sha256": "3c6933c90aaba236d7a9c2deaa7c5b75e1202d60c37ebed4f59f2b9a39d64365"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -21,7 +21,7 @@
                 "sha256:5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0",
                 "sha256:8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"
             ],
-            "markers": "sys_platform == 'darwin'",
+            "markers": "platform_system == 'Darwin'",
             "version": "==0.1.0"
         },
         "attrs": {
@@ -85,7 +85,7 @@
                 "sha256:0f4bcf18293fb666df8511feec0403bdb7e061a5842ea6e88a3177b0ceb34ead",
                 "sha256:387686dd7fc9caf29d2fddcf3116c4b07a11d9025701d220c589a430b0171d8a"
             ],
-            "markers": "python_version >= '3.3'",
+            "index": "pypi",
             "version": "==7.11.1"
         },
         "ipython-genutils": {
@@ -414,9 +414,9 @@
         },
         "pyrsistent": {
             "hashes": [
-                "sha256:f3b280d030afb652f79d67c5586157c5c1355c9a58dfc7940566e28d28f3df1b"
+                "sha256:cdc7b5e3ed77bed61270a47d35434a30617b9becdf2478af76ad2c6ade307280"
             ],
-            "version": "==0.15.6"
+            "version": "==0.15.7"
         },
         "python-dateutil": {
             "hashes": [
