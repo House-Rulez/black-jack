@@ -18,8 +18,8 @@ class StartView(arcade.View):
   def on_show(self):
       self.setup_theme()
       arcade.set_background_color(arcade.color.AMETHYST)
-      self.play_button = PlayButton(100, 100, 40, 40, theme=self.theme, text='play')
-      self.exit_button = ExitButton(200, 100, 40, 40, theme=self.theme, text='exit')
+      self.play_button = PlayButton(100, 100, 80, 80, theme=self.theme, text='play')
+      self.exit_button = ExitButton(200, 100, 80, 80, theme=self.theme, text='exit')
       self.button_list.append(self.play_button)
       self.button_list.append(self.exit_button)
 
@@ -99,7 +99,7 @@ class GameViewBid(arcade.View):
 
     super().on_draw()
 
-    arcade.draw_text(f"You're bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24)
+    arcade.draw_text(f"Your bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24)
 
     for button in self.button_list:
 
