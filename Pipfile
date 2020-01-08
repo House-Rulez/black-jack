@@ -12,6 +12,7 @@ pandas = "*"
 matplotlib = "*"
 jupyterlab = "*"
 ipython = "*"
+pytest = "*"
 
 [requires]
 python_version = "3"
