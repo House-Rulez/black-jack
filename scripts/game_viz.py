@@ -45,7 +45,7 @@ class GameViewBid(arcade.View):
     super().__init__()
     self.c_x = WIDTH/6
     self.c_y = HEIGHT/2
-    self.text =""
+    self.bet = 0
     # place the deck image to the left of the screen
     self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x, center_y=self.c_y)
 
@@ -65,11 +65,15 @@ class GameViewBid(arcade.View):
     #  TODO: connect Place bid to the game
     # self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
 
-    self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
-    self.button_list.append(arcade.gui.SubmitButton(self.textbox_list[0], self.on_submit, WIDTH/2+250 , HEIGHT/2))
+    # self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
+    # self.button_list.append(arcade.gui.SubmitButton(self.textbox_list[0], self.on_submit, WIDTH/2+250 , HEIGHT/2))
 
   def on_show(self):
     arcade.set_background_color(arcade.color.AMAZON)
+    increase1_button = ValueButton(1, 200, 200, 80, 30)
+    decrease1_button = ValueButton(-1, 400, 200, 80, 30)
+    self.button_list.append(increase1_button)
+    self.button_list.append(decrease1_button)
 
   def on_draw(self):
     arcade.start_render()
@@ -79,15 +83,21 @@ class GameViewBid(arcade.View):
     self.player_card_back1.draw()
     self.player_card_back2.draw()
 
+
     super().on_draw()
 
+
     # if player made input
-    if self.text:
-      arcade.draw_text(f"You're bet is {self.text}", 400, 100, arcade.color.BLACK, 24)
+    if self.button_list[0].on_release():
+      # print(self.button_list[0].on_release)
+      self.bet = +1
+      arcade.draw_text(f"You're bet is {self.bet}", WIDTH/2, HEIGHT/2, arcade.color.BLACK, 24)
 
-  def on_submit(self):
-        self.text = self.textbox_list[0].text_storage.text
 
+  # def on_submit(self):
+  #       self.text = "5"
+
+##################### Buttons ###################################
 
 class PlayButton(TextButton):
   """Class to create Play Button for the Starting screen"""
@@ -97,6 +107,7 @@ class PlayButton(TextButton):
 
   def on_press(self):
       self.pressed = True
+
 
 
   def on_release(self):
@@ -117,11 +128,26 @@ class ExitButton(TextButton):
   def on_release(self):
 
     """Method to close game when Exit button clicked"""
-
-    # TODO: figure out why window is not closing
     arcade.close_window()
 
+class ValueButton(TextButton):
 
+  def __init__(self,value=0, x=0, y=0, width=100, height=40, text="", theme=None):
+      super().__init__(x, y, width, height, str(value), theme=theme)
+      self.pressed = False
+      self.value = value
+
+  def on_press(self):
+      self.pressed = True
+      # return self.pressed
+
+  def on_release(self):
+    self.pressed = True
+    return self.value
+
+
+
+##################### Buttons ###################################
 
 class VizGame:
   """class to extract prints and inputs data"""
