@@ -14,7 +14,9 @@ class Game:
   As well as managing the main parts of the game flow.
   """
 
+  # Used to give the user different options for answering prompts
   _valid_exit = {'exit', 'exit()', 'leave', 'quit'}
+  _valid_yes = {'y', 'yes', 'yeah', 'ok', 'sure'}
   _valid_hit = {'h', 'hit', 'deal', 'hit me'}
   _valid_stay = {'s', 'stay', 'stop'}
 
@@ -26,12 +28,21 @@ class Game:
     Exceptions: None
     Out: None
     """
-    self.dealer = Dealer()
-    self.deck = Deck()
-    self.user = User()
+    # Variables to control both the users starting bank as well as their goal
+    self.starting_bank = 100
+    self.score_goal = 250
+
+    # Override functions so you can create a wrapper around the program
     self._print = print_func
     self._input = input_func
-    self.round = 1
+
+    # Create a new deck of cards
+    self.deck = Deck(deck_count=2)
+
+    # Add the players that the game cares about
+    self.dealer = Dealer()
+    self.user = User(starting_bank = self.starting_bank)
+    self.round = 0
 
   def play(self):
     """
@@ -43,27 +54,36 @@ class Game:
     print('\n')
     self._print('Welcome to Black Jack!')
     print('\n')
-    self._print('You start off with 100 chips. Try to make it to 250 chips by beating against the dealer\'s cards.')
+    self._print(f'You start off with {self.starting_bank} chips. Try to make it to {self.score_goal} chips by beating against the dealer\'s cards.')
     print('\n')
     response = self._input('Would you like to play?: y/n ')
 
-    if response == 'y':
+    if response.lower() in self._valid_yes:
 
-      while self.user.get_bank() > 0 and self.user.get_bank() < 250:
+      # Run the game loop
+      while self.user.get_bank() > 0 and self.user.get_bank() < self.score_goal:
         self.turn()
         if self.deck.deck_size() / 4 > self.deck.cards_remaining():
           self.deck.shuffle()
 
-      exit_game()
+      if self.user.get_bank() >= self.score_goal:
+        self.start_endless()
+
+      if self.user.get_bank() <= 0:
+        if self.user.get_max_bank() <= self.starting_bank:
+          self._print(f'You had no net gain over {self.round} rounds.')
+        else:
+          self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
 
     else:
       self._print('Okay, come again!')
-      exit_game()
+
+    exit_game()
 
 
   def iterate_round(self):
     """
-    Incrament the round number
+    Increment the round number
     In: None
     Out: None
     """
@@ -79,12 +99,29 @@ class Game:
     self.deck.shuffle()
 
 
+  def start_endless(self):
+    """
+    This mode is made an option once the user passes the point where they have more points the the goal. It allows them to play until they go broke.
+    In: None
+    Out: None
+    """
+    self._print(f'You have beat the table in {self.round} hands')
+    response = self._input(f'You have {self.user.get_bank()} points. Would you like to continue? (y/n) ')
+    if response.lower() in self._valid_yes:
+      while self.user.get_bank() > 0:
+        self.turn()
+        if self.deck.deck_size() / 4 > self.deck.cards_remaining():
+          self.deck.shuffle()
+
+
   def turn(self):
     """
     Runs through a turn of the game
     In: None
     Out: None
     """
+    self.iterate_round()
+
     self.place_user_bet()
     self.deal()
     self.user_turn()
@@ -94,7 +131,6 @@ class Game:
     self.calculate_winner()
 
     self.reset_hands()
-    self.iterate_round()
 
 
   def place_user_bet(self):
@@ -115,7 +151,7 @@ class Game:
       if player_bet.lower() in self._valid_exit:
         exit_game()
 
-      if re.match(r'[0-9]+', player_bet):
+      if re.match(r'\s*[0-9]+\s*$', player_bet):
         player_bet = int(player_bet)
 
         if player_bet >= 1 and player_bet <= current_bank:
@@ -123,13 +159,13 @@ class Game:
           break
 
         elif player_bet == 0:
-          self._print('Your bet must be greater then 0')
+          self._print('Your bet must be greater than 0')
 
         else:
-          self._print('You can\'t bet more point then you have')
+          self._print('You can\'t bet more points than you have')
 
       else:
-        print('Please enter an integer')
+        self._print('Please enter an integer')
 
 
   def deal(self):
@@ -145,15 +181,15 @@ class Game:
 
   def user_turn(self):
     """
-    Handles the users decision the either hit and gain a card or to stay and keep the cards they have.
+    Handles the users decision to either hit and gain a card, or to stay and keep the cards they have.
     In: None
     Out: None
     """
     while not self.user.bust():
       self.save_game()
       print('\n')
-      self._print(f'The Dealer shows {repr(self.dealer)}')
-      self._print(f'Your hand is: {str(self.user)}')
+      self._print(f'The Dealer shows:\n{repr(self.dealer)}\n')
+      self._print(f'Your hand is:\n{str(self.user)}\n')
       self._print('Your current score is ', self.user.get_score())
       hit_or_stay_input = self._input('Would you like to hit or stay? (h/s): ')
 
@@ -172,7 +208,7 @@ class Game:
 
   def dealer_turn(self):
     """
-    Controls the dealers logic on if they need to hit again or keep the cards that they already have
+    Controls the dealers logic if they need to hit again or keep the cards that they already have
     In: None
     Out: None
     """
@@ -190,17 +226,18 @@ class Game:
     In: None
     Out: Changes the value in the Player's bank
     """
+    print('\n')
+    self._print(f'Your last hand is:\n{str(self.user)}')
     self._print(f'Your score is {self.user.get_score()}')
     if self.user.bust():
       self._print('You have bust')
       self.user.beat_dealer(False)
 
     else:
-      print('\n')
-      self._print(f'The Dealer\'s hand is: {str(self.dealer)}')
+      self._print(f'The Dealer\'s hand is:\n{str(self.dealer)}')
       self._print(f'Dealer has {self.dealer.get_score()} points')
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
-        self._print(f'It was a tie\nYou don\'t gain or loose points')
+        self._print(f'It was a tie\nYou don\'t gain or lose points')
         return
 
       result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()

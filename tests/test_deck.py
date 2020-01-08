@@ -34,9 +34,15 @@ def test_deck_size(deck):
   assert deck.deck_size() == 104
 
 def test_cards_remaining(deck, user):
-  deck.deal()
-  deck.deal()
-  deck.deal() 
-  expected = 101
+  for _ in range(0, 52):
+    deck.deal()
+  expected = 52
+  actual = deck.cards_remaining()
+  assert expected == actual
+
+def test_cards_remaining_two(deck, user):
+  for _ in range(0, 103):
+    deck.deal()
+  expected = 1
   actual = deck.cards_remaining()
   assert expected == actual
