@@ -13,17 +13,90 @@ def test_import():
 def test_game_instance():
   assert Game()
 
-# def test_greeting_prompt(game):
+def test_player_chooses_easy_difficulty(game):
+  prints = [
+    'Welcome to Black Jack!', 
+    'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.',
+    'Your current bank is 100',
+    'how much would you like to bet?'
+  ]
 
-#     set_scripts(
-#         ['Welcome to Black Jack!', 'You start off with 100 chips. Try to make it to 250 chips by beating against the dealer\'s cards.', 'Your current bank is 100'],
-#         ['Would you like to play?: y/n '],
-#         ['y']
-#     )
+  prompts = [
+    'Would you like to play?: y/n ',
+    'Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ',
+    'Bet: '
+  ]
 
-#     game.play()
+  inputs = ['y', 'e', 'exit']
+
+  set_scripts(prints, prompts, inputs)
+
+  with pytest.raises(SystemExit) as e:
+    game.play()
 
 
+def test_player_chooses_hard_difficulty(game):
+  prints = [
+    'Welcome to Black Jack!', 
+    'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.',
+    'Your current bank is 50',
+    'how much would you like to bet?'
+  ]
+
+  prompts = [
+    'Would you like to play?: y/n ',
+    'Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ',
+    'Bet: '
+  ]
+
+  inputs = ['y', 'h', 'exit']
+
+  set_scripts(prints, prompts, inputs)
+
+  with pytest.raises(SystemExit) as e:
+    game.play()
+
+
+def test_player_chooses_easy_difficulty_extended(game):
+  prints = [
+    'Welcome to Black Jack!', 
+    'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.',
+    'Difficulty must be Easy or Hard',
+    'Your current bank is 100',
+    'how much would you like to bet?',
+  ]
+
+  prompts = [
+    'Would you like to play?: y/n ',
+    'Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ',
+    'Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ',
+    'Bet: '
+  ]
+
+  inputs = ['y', 't', 'e', 'exit']
+
+  set_scripts(prints, prompts, inputs)
+
+  with pytest.raises(SystemExit) as e:
+    game.play()
+
+def test_player_chooses_difficulty_exit(game):
+  prints = [
+    'Welcome to Black Jack!', 
+    'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.',
+  ]
+
+  prompts = [
+    'Would you like to play?: y/n ',
+    'Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): '
+  ]
+
+  inputs = ['y', 'exit']
+
+  set_scripts(prints, prompts, inputs)
+
+  with pytest.raises(SystemExit) as e:
+    game.play()
 
 #################################################
 ## Below code is for helping out tests above ####
