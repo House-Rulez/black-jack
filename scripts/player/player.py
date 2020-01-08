@@ -158,9 +158,9 @@ class User(Player):
   to_csv()
   Takes no arguments but will save the users current hand to a csv file to be used when calculating statistics in the notebook
   """
-  def __init__(self):
+  def __init__(self, starting_bank = 100):
     super(User, self).__init__()
-    self.bank = 100
+    self.max_bank = self.bank = starting_bank
     self.bet = 0
 
 
@@ -194,6 +194,14 @@ class User(Player):
     return self.bet
 
 
+  def get_max_bank(self):
+    """
+    Returns the max value of point the user has had saved at any one time
+    In: None
+    Out: Int
+    """
+    return self.max_bank
+
   def beat_dealer(self, win = False):
     """
     Edits the players bank value based on the input boolean. True adds. False subtracts
@@ -202,6 +210,7 @@ class User(Player):
     """
     if win:
       self.bank += self.bet
+      self.max_bank = self.bank if self.bank > self.max_bank else self.max_bank
     else:
       self.bank -= self.bet
 
