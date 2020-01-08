@@ -12,14 +12,14 @@ class StartView(arcade.View):
 
   def setup_theme(self):
       self.theme = Theme()
-      self.theme.set_font(24, arcade.color.WHITE)
+      self.theme.set_font(24, arcade.color.BLACK)
       self.set_button_textures()
 
   def on_show(self):
       self.setup_theme()
       arcade.set_background_color(arcade.color.AMETHYST)
-      self.play_button = PlayButton(100, 100, 80, 80, theme=self.theme, text='play')
-      self.exit_button = ExitButton(200, 100, 80, 80, theme=self.theme, text='exit')
+      self.play_button = PlayButton(550, 100, 80, 80, theme=self.theme, text='play')
+      self.exit_button = ExitButton(650, 100, 80, 80, theme=self.theme, text='exit')
       self.button_list.append(self.play_button)
       self.button_list.append(self.exit_button)
 
@@ -35,8 +35,9 @@ class StartView(arcade.View):
 
   def on_draw(self):
       arcade.start_render()
-      arcade.draw_text("Welcome to Black Jack! \n            You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n Would you like to play?", self.WIDTH/2, self.HEIGHT/2,
-                        arcade.color.BLACK, font_size=30, anchor_x="center")
+      start_x = self.WIDTH/2
+      start_y = self.HEIGHT/2
+      arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n Would you like to play?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
       super().on_draw()
       self.play_button.draw()
       self.exit_button.draw()
