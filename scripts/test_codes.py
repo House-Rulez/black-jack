@@ -7,12 +7,11 @@ class Window(arcade.Window):
         self.text = ""
         self.center_x = self.width / 2
         self.center_y = self.height / 2
-        self.outline_color = arcade.color.BLACK
 
     def setup(self):
         arcade.set_background_color(arcade.color.AMETHYST)
         self.text_list.append(arcade.gui.Text("Name: ", self.center_x - 225, self.center_y))
-        self.textbox_list.append(arcade.gui.TextBox(self.center_x - 125, self.center_y, width=300, height=40, theme=None, outline_color=arcade.color.WHITE))
+        self.textbox_list.append(arcade.gui.TextBox(self.center_x - 125, self.center_y))
         self.button_list.append(arcade.gui.SubmitButton(self.textbox_list[0], self.on_submit, self.center_x,
                                                         self.center_y))
 

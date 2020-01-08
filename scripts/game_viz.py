@@ -26,7 +26,7 @@ class StartView(arcade.View):
   def on_show(self):
       arcade.set_background_color(arcade.color.AMETHYST)
       play_button = PlayButton(200, 200, 80, 30, "Play")
-      exit_button = ExitButton(400, 200, 80, 20, "Exit")
+      exit_button = ExitButton(400, 200, 80, 30, "Exit")
       self.button_list.append(play_button)
       self.button_list.append(exit_button)
 
@@ -40,12 +40,12 @@ class StartView(arcade.View):
 
 class GameViewBid(arcade.View):
   """Class to display the game view for the game"""
-  
+
   def __init__(self):
     super().__init__()
     self.c_x = WIDTH/6
     self.c_y = HEIGHT/2
-
+    self.text =""
     # place the deck image to the left of the screen
     self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x, center_y=self.c_y)
 
@@ -56,11 +56,17 @@ class GameViewBid(arcade.View):
     # # place 2 player's closed cards to the bottom of the screen
     self.player_card_back1  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y - HEIGHT/4 - 30)
     self.player_card_back2  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 +140, center_y=self.c_y - HEIGHT/4 - 30)
-    self.text = ''
 
-    self.text = arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center")
-    self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 200, HEIGHT/2 - 200, width=300, height=40, theme=None, outline_color=arcade.color.WHITE))
-    self.button_list.append(arcade.gui.SubmitButton(self.textbox_list[0], self.on_submit, WIDTH/2+250 , HEIGHT/2 ))
+
+    # Place Bid section
+    self.text_list.append(arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center"))
+
+    # TODO:Find out why place Bid Field doesn't work
+    #  TODO: connect Place bid to the game
+    # self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
+
+    self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
+    self.button_list.append(arcade.gui.SubmitButton(self.textbox_list[0], self.on_submit, WIDTH/2+250 , HEIGHT/2))
 
   def on_show(self):
     arcade.set_background_color(arcade.color.AMAZON)
@@ -72,13 +78,12 @@ class GameViewBid(arcade.View):
     self.dealer_card_back2.draw()
     self.player_card_back1.draw()
     self.player_card_back2.draw()
-    arcade.draw_text("Place your bid", WIDTH/2, HEIGHT/2,
-                        arcade.color.BLACK, font_size=20, anchor_x="center")
+
     super().on_draw()
 
     # if player made input
     if self.text:
-            arcade.draw_text(f"Hello {self.text}", 400, 100, arcade.color.BLACK, 24)
+      arcade.draw_text(f"You're bet is {self.text}", 400, 100, arcade.color.BLACK, 24)
 
   def on_submit(self):
         self.text = self.textbox_list[0].text_storage.text
@@ -113,7 +118,7 @@ class ExitButton(TextButton):
 
     """Method to close game when Exit button clicked"""
 
-    # TO DO: figure out why window is not closing
+    # TODO: figure out why window is not closing
     arcade.close_window()
 
 
@@ -139,6 +144,7 @@ class VizGame:
   def _input(self, *args):
     prompt = args[0]
 
+    ########## TODO: Check if it is actually sends the answer to the game
 
     if prompt == 'Would you like to play?: y/n' and PlayButton.on_release:
 
