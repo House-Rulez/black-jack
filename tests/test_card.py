@@ -15,10 +15,6 @@ from card import Card, Heart, Spade, Diamond, Club
 ## Test the Imports to see if they are working ##
 #################################################
 
-@pytest.fixture()
-def card():
-    return Card()
-
 def test_import():
   assert Heart
   assert Spade

@@ -83,7 +83,7 @@ class Game:
 
   def iterate_round(self):
     """
-    Incrament the round number
+    Increment the round number
     In: None
     Out: None
     """
@@ -159,10 +159,10 @@ class Game:
           break
 
         elif player_bet == 0:
-          self._print('Your bet must be greater then 0')
+          self._print('Your bet must be greater than 0')
 
         else:
-          self._print('You can\'t bet more point then you have')
+          self._print('You can\'t bet more points than you have')
 
       else:
         self._print('Please enter an integer')
@@ -181,7 +181,7 @@ class Game:
 
   def user_turn(self):
     """
-    Handles the users decision the either hit and gain a card or to stay and keep the cards they have.
+    Handles the users decision to either hit and gain a card, or to stay and keep the cards they have.
     In: None
     Out: None
     """
@@ -208,7 +208,7 @@ class Game:
 
   def dealer_turn(self):
     """
-    Controls the dealers logic on if they need to hit again or keep the cards that they already have
+    Controls the dealers logic if they need to hit again or keep the cards that they already have
     In: None
     Out: None
     """
@@ -236,7 +236,7 @@ class Game:
       self._print(f'The Dealer\'s hand is: {str(self.dealer)}')
       self._print(f'Dealer has {self.dealer.get_score()} points')
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
-        self._print(f'It was a tie\nYou don\'t gain or loose points')
+        self._print(f'It was a tie\nYou don\'t gain or lose points')
         return
 
       result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()
