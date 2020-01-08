@@ -1,5 +1,9 @@
 class Card:
-  """"""
+  """
+  Used to create a card that stores both the value and the name of the function
+  
+
+  """
   def __init__(self, value):
     self.suit = None
     self.value, self.name = Card.card_values(value)
