@@ -44,15 +44,38 @@ class Player:
     In: None
     Out: String
     """
+    line1 = ''
+    line2 = ''
+    line3 = ''
+    for card in self.hand:
+      name = card.name
+      if len(name) > 2:
+        name = name[0]
+      space = ' ' * (3-len(name))
+
+      suit = card.suit[0]
+      if suit == 'C':
+        suit = '\u2663'
+      elif suit == 'D':
+        suit = '\u2662'
+      elif suit == 'H':
+        suit = '\u2661'
+      elif suit == 'S':
+        suit = '\u2660'
+
+      line1 += '|' + name + space + suit + '| '
+      line2 += '|    | '
+      line3 += '|' + suit + space + name + '| '
+    return f'{line1}\n{line2}\n{line3}'
+
+
+  def __repr__(self):
     output = '['
     for card in self.hand:
       if not output == '[':
         output += ', '
       output += str(card)
     return output + ']'
-
-  def __repr__(self):
-    return str(self)
 
   def get_score(self):
     """
@@ -131,12 +154,31 @@ class Dealer(Player):
     In: None
     Out: String
     """
-    output = '['
-    for i in range(1 ,len(self.hand)):
-      if output == '[':
-        output += '**********, '
-      output += str(self.hand[i])
-    return output + ']'
+    line1 = '|XXXX| '
+    line2 = '|XXXX| '
+    line3 = '|XXXX| '
+    for card in self.hand:
+      if card == self.hand[0]:
+        continue
+      name = card.name
+      if len(name) > 2:
+        name = name[0]
+      space = ' ' * (3-len(name))
+
+      suit = card.suit[0]
+      if suit == 'C':
+        suit = '♣'
+      elif suit == 'D':
+        suit = '♢'
+      elif suit == 'H':
+        suit = '♡'
+      elif suit == 'S':
+        suit = '♠'
+
+      line1 += '|' + name + space + suit + '| '
+      line2 += '|    | '
+      line3 += '|' + suit + space + name + '| '
+    return f'{line1}\n{line2}\n{line3}'
 
 
 class User(Player):
