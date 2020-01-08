@@ -31,8 +31,8 @@ class StartView(arcade.View):
   def on_show(self):
       self.setup_theme()
       arcade.set_background_color(arcade.color.AMETHYST)
-      self.play_button = PlayButton(100, 100, 40, 40, theme=self.theme, text='play')
-      self.exit_button = ExitButton(200, 100, 40, 40, theme=self.theme, text='exit')
+      self.play_button = PlayButton(100, 100, 80, 80, theme=self.theme, text='play')
+      self.exit_button = ExitButton(250, 100, 80, 80, theme=self.theme, text='exit')
       self.button_list.append(self.play_button)
       self.button_list.append(self.exit_button)
 
@@ -41,8 +41,6 @@ class StartView(arcade.View):
       hover = "img/buttons/pink.png"
       clicked = "img/buttons/red.png"
       locked = "img/buttons/blue.png"
-      print(os.getcwd())
-      print(type(self.theme))
       self.theme.add_button_textures(normal, hover, clicked, locked)
 
 
