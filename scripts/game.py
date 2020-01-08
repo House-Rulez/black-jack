@@ -15,7 +15,7 @@ class Game:
   """
 
   # Used to give the user different options for answering prompts
-  _valid_exit = {'exit', 'exit()', 'leave', 'quit'}
+  _valid_exit = {'exit', 'exit()', 'leave', 'quit', 'q'}
   _valid_yes = {'y', 'yes', 'yeah', 'ok', 'sure'}
   _valid_hit = {'h', 'hit', 'deal', 'hit me'}
   _valid_stay = {'s', 'stay', 'stop'}
@@ -54,9 +54,11 @@ class Game:
     print('\n')
     self._print('Welcome to Black Jack!')
     print('\n')
-    self._print(f'You start off with {self.starting_bank} chips. Try to make it to {self.score_goal} chips by beating against the dealer\'s cards.')
+    self._print(f'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.')
     print('\n')
     response = self._input('Would you like to play?: y/n ')
+
+    self.difficulty_level()
 
     if response.lower() in self._valid_yes:
 
@@ -79,6 +81,28 @@ class Game:
       self._print('Okay, come again!')
 
     exit_game()
+
+
+  def difficulty_level(self):
+    valid_easy_responses = {'e', 'easy'}
+    valid_hard_responses = {'h', 'hard'}
+    while True:
+      level_response = self._input('Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ')
+
+      if level_response.lower() in valid_easy_responses:
+        self.user = User(starting_bank = 100)
+        self.score_goal = 250
+        break
+
+      if level_response.lower() in valid_hard_responses:
+        self.user = User(starting_bank = 50)
+        self.score_goal = 500
+        break
+
+      if level_response.lower() in self._valid_exit:
+        exit_game()
+
+      self._print('Difficulty must be Easy or Hard')
 
 
   def iterate_round(self):
