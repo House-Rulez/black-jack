@@ -188,8 +188,8 @@ class Game:
     while not self.user.bust():
       self.save_game()
       print('\n')
-      self._print(f'The Dealer shows {repr(self.dealer)}')
-      self._print(f'Your hand is: {str(self.user)}')
+      self._print(f'The Dealer shows:\n{repr(self.dealer)}\n')
+      self._print(f'Your hand is:\n{str(self.user)}\n')
       self._print('Your current score is ', self.user.get_score())
       hit_or_stay_input = self._input('Would you like to hit or stay? (h/s): ')
 
@@ -226,14 +226,15 @@ class Game:
     In: None
     Out: Changes the value in the Player's bank
     """
+    print('\n')
+    self._print(f'Your last hand is:\n{str(self.user)}')
     self._print(f'Your score is {self.user.get_score()}')
     if self.user.bust():
       self._print('You have bust')
       self.user.beat_dealer(False)
 
     else:
-      print('\n')
-      self._print(f'The Dealer\'s hand is: {str(self.dealer)}')
+      self._print(f'The Dealer\'s hand is:\n{str(self.dealer)}')
       self._print(f'Dealer has {self.dealer.get_score()} points')
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
         self._print(f'It was a tie\nYou don\'t gain or lose points')
