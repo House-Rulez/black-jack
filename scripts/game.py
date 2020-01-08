@@ -15,7 +15,7 @@ class Game:
   """
 
   # Used to give the user different options for answering prompts
-  _valid_exit = {'exit', 'exit()', 'leave', 'quit'}
+  _valid_exit = {'exit', 'exit()', 'leave', 'quit', 'q'}
   _valid_yes = {'y', 'yes', 'yeah', 'ok', 'sure'}
   _valid_hit = {'h', 'hit', 'deal', 'hit me'}
   _valid_stay = {'s', 'stay', 'stop'}
