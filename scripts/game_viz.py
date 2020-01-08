@@ -5,7 +5,7 @@ sys.path.insert(1, myPath + '/./player/')
 
 import arcade
 from arcade.gui import *
-# TO DO Dont'import star
+# TO DO Don't import star
 import os
 from game import Game
 
@@ -28,12 +28,27 @@ class MyGameWindow(arcade.Window):
 class StartView(arcade.View):
   """Class to display the starting View for the game"""
 
+  def setup_theme(self):
+      self.theme = Theme()
+      self.theme.set_font(24, arcade.color.WHITE)
+      self.set_button_textures()
+
   def on_show(self):
+      self.setup_theme()
       arcade.set_background_color(arcade.color.AMETHYST)
-      play_button = PlayButton(200, 200, 80, 30, "Play")
-      exit_button = ExitButton(400, 200, 80, 30, "Exit")
-      self.button_list.append(play_button)
-      self.button_list.append(exit_button)
+      self.play_button = PlayButton(100, 100, 40, 40, theme=self.theme, text='play')
+      self.exit_button = ExitButton(200, 100, 40, 40, theme=self.theme, text='exit')
+      self.button_list.append(self.play_button)
+      self.button_list.append(self.exit_button)
+
+  def set_button_textures(self):
+      normal = "img/buttons/green.png"
+      hover = "img/buttons/pink.png"
+      clicked = "img/buttons/red.png"
+      locked = "img/buttons/blue.png"
+      print(os.getcwd())
+      print(type(self.theme))
+      self.theme.add_button_textures(normal, hover, clicked, locked)
 
 
   def on_draw(self):
@@ -41,6 +56,9 @@ class StartView(arcade.View):
       arcade.draw_text("Welcome to Black Jack! \n            You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n Would you like to play?", WIDTH/2, HEIGHT/2,
                         arcade.color.BLACK, font_size=30, anchor_x="center")
       super().on_draw()
+      self.play_button.draw()
+      self.exit_button.draw()
+
 
 
 class GameViewBid(arcade.View):
@@ -110,8 +128,9 @@ class GameViewBid(arcade.View):
 
 class PlayButton(TextButton):
   """Class to create Play Button for the Starting screen"""
-  def __init__(self, x=0, y=0, width=100, height=40, text=" ", theme=None):
+  def __init__(self, x=0, y=0, width=40, height=40,  theme=None, text=" "):
       super().__init__(x, y, width, height, text, theme=theme)
+
 
 
   def on_press(self):
@@ -128,7 +147,7 @@ class PlayButton(TextButton):
 class ExitButton(TextButton):
   """Class to create Exit Button for the Starting screen"""
 
-  def __init__(self, x=0, y=0, width=100, height=40, text=" ", theme=None):
+  def __init__(self,x=0, y=0, width=100, height=40, theme=None, text=" "):
       super().__init__(x, y, width, height, text, theme=theme)
 
   def on_press(self):
