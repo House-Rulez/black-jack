@@ -4,32 +4,31 @@ from arcade.gui import *
 import os
 from game import Game
 
-
-
+# window Width
 WIDTH = 1200
+
+# window Height
 HEIGHT = 700
 
+class MyGameWindow(arcade.Window):
+  """Class to create game window"""
 
-class GameView(arcade.View):
-    def on_show(self):
-        arcade.set_background_color(arcade.color.GREEN)
+  def __init__(self, width, height, title, from_top, from_right):
+    super().__init__(width, height, title)
+    self.set_location(from_top,from_right)
 
-    def on_draw(self):
-        arcade.start_render()
-        arcade.draw_text("Game - press SPACE to advance", WIDTH/2, HEIGHT/2,
-                         arcade.color.BLACK, font_size=30, anchor_x="center")
 
-    # def on_key_press(self, key, _modifiers):
-    #     if key == arcade.key.SPACE:
-    #         game_over_view = GameOverView()
-    #         self.window.show_view(game_over_view)
 
 
 class StartView(arcade.View):
+  """Class to display the starting View for the game"""
+
   def on_show(self):
-      arcade.set_background_color(arcade.color.ORANGE)
-      play_button = TextButton(200, 200, 350, 20, "Play")
+      arcade.set_background_color(arcade.color.AMETHYST)
+      play_button = PlayButton(200, 200, 80, 30, "Play")
+      exit_button = ExitButton(400, 200, 80, 20, "Exit")
       self.button_list.append(play_button)
+      self.button_list.append(exit_button)
 
 
   def on_draw(self):
@@ -38,110 +37,84 @@ class StartView(arcade.View):
                         arcade.color.BLACK, font_size=30, anchor_x="center")
       super().on_draw()
 
-  # def on_mouse_press(self, _x, _y, _button, _modifiers):
-  #     game_view = GameView()
-  #     self.window.show_view(game_view)
 
-  # def set_button_textures(self):
-  #   normal = "img/icons8-button-100.png"
-  #   hover = "img/icons8-button-100.png"
-  #   clicked = "img/icons8-button-96.png"
-  #   locked = "img/icons8-button-100.png"
-  #   self.theme.add_button_textures(normal, hover, clicked, locked)
+class GameViewBid(arcade.View):
+  """Class to display the game view for the game"""
+  
+  def __init__(self):
+    super().__init__()
+    self.c_x = WIDTH/6
+    self.c_y = HEIGHT/2
 
-  # def setup_theme(self):
-  #   self.theme = Theme()
-  #   self.theme.set_font(24, arcade.color.WHITE)
-  #   self.set_button_textures()
+    # place the deck image to the left of the screen
+    self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x, center_y=self.c_y)
 
-  # def set_buttons(self):
-  #   self.button_list.append(PlayButton(self, 650, 300, 110, 50, theme=self.theme))
-  #   self.button_list.append(ExitButton(self, 450, 300, 110, 50, theme=self.theme))
+    # place 2 dealer's closed cards to the top of the screen
+    self.dealer_card_back1 = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y + HEIGHT/4 +30)
+    self.dealer_card_back2 = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 + 140, center_y=self.c_y + HEIGHT/4 + 30)
 
-  # def setup(self):
-  #   self.setup_theme()
-  #   self.set_buttons()
+    # # place 2 player's closed cards to the bottom of the screen
+    self.player_card_back1  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y - HEIGHT/4 - 30)
+    self.player_card_back2  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 +140, center_y=self.c_y - HEIGHT/4 - 30)
+    self.text = ''
 
+    self.text = arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center")
+    self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 200, HEIGHT/2 - 200, width=300, height=40, theme=None, outline_color=arcade.color.WHITE))
+    self.button_list.append(arcade.gui.SubmitButton(self.textbox_list[0], self.on_submit, WIDTH/2+250 , HEIGHT/2 ))
 
+  def on_show(self):
+    arcade.set_background_color(arcade.color.AMAZON)
+
+  def on_draw(self):
+    arcade.start_render()
+    self.deck_back.draw()
+    self.dealer_card_back1.draw()
+    self.dealer_card_back2.draw()
+    self.player_card_back1.draw()
+    self.player_card_back2.draw()
+    arcade.draw_text("Place your bid", WIDTH/2, HEIGHT/2,
+                        arcade.color.BLACK, font_size=20, anchor_x="center")
+    super().on_draw()
+
+    # if player made input
+    if self.text:
+            arcade.draw_text(f"Hello {self.text}", 400, 100, arcade.color.BLACK, 24)
+
+  def on_submit(self):
+        self.text = self.textbox_list[0].text_storage.text
 
 
 class PlayButton(TextButton):
-    def __init__(self, x=0, y=0, width=100, height=40, text="Play", theme=None):
-        super().__init__(x, y, width, height, text, theme=theme)
-        # self.game = game
-
-    def on_press(self):
-        self.pressed = True
+  """Class to create Play Button for the Starting screen"""
+  def __init__(self, x=0, y=0, width=100, height=40, text=" ", theme=None):
+      super().__init__(x, y, width, height, text, theme=theme)
 
 
-    def on_release(self):
-      game_view = GameView()
-      self.window.show_view(game_view)
-      
-        # # if self.pressed:
-
-        #   # self.game.pause = False
-        #   self.pressed = False
-        #   print("uhkhb")
-        #   # arcade.close_window()
+  def on_press(self):
+      self.pressed = True
 
 
-# class ExitButton(TextButton):
-#     def __init__(self, game, x=0, y=0, width=100, height=40, text="Exit", theme=None):
-#         super().__init__(x, y, width, height, text, theme=theme)
-#         self.game = game
+  def on_release(self):
+    """Method to change view to GAmeViewBid when Play button clicked"""
+    game_view = GameViewBid()
+    my_game.show_view(game_view)
 
-#     def on_press(self):
-#         self.pressed = True
-#         print('niinini')
+class ExitButton(TextButton):
+  """Class to create Exit Button for the Starting screen"""
 
-#     def on_release(self):
-#         if self.pressed:
-#             self.game.pause = True
-#             self.pressed = False
+  def __init__(self, x=0, y=0, width=100, height=40, text=" ", theme=None):
+      super().__init__(x, y, width, height, text, theme=theme)
 
-
-
-class MyGameWindow(arcade.Window):
-  def __init__(self, width, height, title, from_top, from_right):
-    super().__init__(width, height, title)
-    self.set_location(from_top,from_right)
-    arcade.set_background_color(arcade.color.WHITE)
-    # self.print_= print_
-
-    self.pause = False
-    # self.text = "Graphical User Interface"
-    self.text_x = 0
-    self.text_y = 300
-    self.text_font_size = 40
-    self.speed = 1
-    self.theme = None
-
-  # def set_button_textures(self):
-  #   normal = "img/icons8-button-100.png"
-  #   hover = "img/icons8-button-100.png"
-  #   clicked = "img/icons8-button-96.png"
-  #   locked = "img/icons8-button-100.png"
-  #   self.theme.add_button_textures(normal, hover, clicked, locked)
-
-  # def setup_theme(self):
-  #   self.theme = Theme()
-  #   self.theme.set_font(24, arcade.color.WHITE)
-  #   self.set_button_textures()
-
-  # def set_buttons(self):
-  #   self.button_list.append(PlayButton(self, 650, 300, 110, 50, theme=self.theme))
-  #   self.button_list.append(ExitButton(self, 450, 300, 110, 50, theme=self.theme))
-
-  # def setup(self):
-  #   self.setup_theme()
-  #   self.set_buttons()
+  def on_press(self):
+      self.pressed = True
 
 
-  # def on_draw(self):
-  #   arcade.start_render()
-  #   super().on_draw()
-  #   arcade.draw_text(self.print_, 200, 350, arcade.color.BLACK, 23)
+  def on_release(self):
+
+    """Method to close game when Exit button clicked"""
+
+    # TO DO: figure out why window is not closing
+    arcade.close_window()
 
 
 
@@ -157,15 +130,9 @@ class VizGame:
 
     if msg.startswith('Welcome to Black Jack!'):
 
-      my_game = MyGameWindow(1200, 700, 'blackjack', 50, 50)
-
-      # my_game.on_draw()
-
       menu_view = StartView()
-      # menu_view.setup()
-      my_game.show_view(menu_view)
-      # my_game.setup()
 
+      my_game.show_view(menu_view)
 
       arcade.run()
 
@@ -178,35 +145,11 @@ class VizGame:
       return 'y'
 
 
-
-
-
-
-
 if __name__ == "__main__":
+    my_game = MyGameWindow(1200, 700, 'blackjack', 10, 10)
     viz_game = VizGame()
-    # arcade.run()
     game = Game(viz_game._print, viz_game._input)
     viz_game.game = game
 
+    # start the game
     game.play()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
