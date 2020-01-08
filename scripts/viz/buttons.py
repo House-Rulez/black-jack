@@ -7,8 +7,6 @@ class PlayButton(TextButton):
   def __init__(self, x=0, y=0, width=40, height=40,  theme=None, text=" "):
       super().__init__(x, y, width, height, text, theme=theme)
 
-
-
   def on_press(self):
       self.pressed = True
 
