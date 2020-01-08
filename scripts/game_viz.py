@@ -1,3 +1,8 @@
+import sys, os
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/./deck/')
+sys.path.insert(1, myPath + '/./player/')
+
 import arcade
 from arcade.gui import *
 # TO DO Dont'import star
@@ -86,12 +91,16 @@ class GameViewBid(arcade.View):
 
     super().on_draw()
 
+    arcade.draw_text(f"You're bet is {self.bet}", WIDTH/2, HEIGHT/2, arcade.color.BLACK, 24)
+
+    for button in self.button_list:
 
     # if player made input
-    if self.button_list[0].on_release():
-      # print(self.button_list[0].on_release)
-      self.bet = +1
-      arcade.draw_text(f"You're bet is {self.bet}", WIDTH/2, HEIGHT/2, arcade.color.BLACK, 24)
+      if button.on_release():
+        if self.bet + button.get_value() < 1:
+          continue
+        # print(self.button_list[0].on_release)
+        self.bet += button.get_value()
 
 
   # def on_submit(self):
@@ -111,6 +120,7 @@ class PlayButton(TextButton):
 
 
   def on_release(self):
+    self.pressed = False
     """Method to change view to GAmeViewBid when Play button clicked"""
     game_view = GameViewBid()
     my_game.show_view(game_view)
@@ -142,9 +152,13 @@ class ValueButton(TextButton):
       # return self.pressed
 
   def on_release(self):
-    self.pressed = True
-    return self.value
 
+    if self.pressed:
+      self.pressed = False
+      return True
+
+  def get_value(self):
+    return self.value
 
 
 ##################### Buttons ###################################
