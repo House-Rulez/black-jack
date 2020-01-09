@@ -23,7 +23,7 @@ class Game:
     Out: None
     """
     # Variables to control both the users starting bank as well as their goal
-    self.starting_bank = 270
+    self.starting_bank = 100
     self.score_goal = 250
     self.endless = False
 
