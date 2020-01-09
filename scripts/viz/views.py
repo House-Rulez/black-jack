@@ -9,6 +9,7 @@ class StartView(arcade.View):
     self.game = game
     self.WIDTH = WIDTH
     self.HEIGHT = HEIGHT
+    self.start_game = False
 
   def setup_theme(self):
       self.theme = Theme()
@@ -56,8 +57,6 @@ class StartView(arcade.View):
         arcade.close_window()
 
 
-
-
 class GameViewBid(arcade.View):
   """Class to display the game view for the game"""
 
@@ -80,7 +79,12 @@ class GameViewBid(arcade.View):
     self.player_card_back2  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 +140, center_y=self.c_y - HEIGHT/4 - 30)
 
 
-    # TODO:Find out why place Bid Field doesn't work
+   # TODO:Find out why place Bid Field doesn't work
+
+    # Place Bid section
+    self.text_list.append(arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center"))
+
+
     #  TODO: connect Place bid to the game
     # self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
 

@@ -29,11 +29,11 @@ class VizGame:
 
   def __init__(self):
     self.game = Game(self._print, self._input)
-    self.game.play
+    self.game.play()
     self.window = MyGameWindow(1200, 700, 'blackjack', 10, 10)
-    menu_view = StartView(self, WIDTH, HEIGHT)
+    self.view = StartView(self, WIDTH, HEIGHT)
 
-    self.window.show_view(menu_view)
+    self.window.show_view(self.view)
 
     arcade.run()
 
@@ -42,8 +42,9 @@ class VizGame:
 
     msg = args[0]
 
-
-
+    if msg == 'how much would you like to bet?':
+      self.view = GameViewBid(WIDTH, HEIGHT)
+      self.window.show_view(self.view)
 
   def _input(self, *args):
     prompt = args[0]
@@ -51,8 +52,14 @@ class VizGame:
     ########## TODO: Check if it is actually sends the answer to the game
 
     if prompt == 'Would you like to play?: y/n':
+      print('Button Press')
+      if self.view.start_game:
+        self.view = GameViewBid(WIDTH, HEIGHT)
+        self.window.show_view(self.view)
+        return 'y'
+    else:
+      return 'e'
 
-      return 'y'
 
 
 if __name__ == "__main__":
