@@ -23,8 +23,8 @@ class Player:
   Removes all cards from the player's hand
   """
 
-  def __init__(self):
-    self.hand = []
+  def __init__(self, hand=None):
+    self.hand = hand or []
     self._bust = False
 
 

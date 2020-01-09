@@ -21,7 +21,7 @@ class Game:
   _valid_stay = {'s', 'stay', 'stop'}
 
 
-  def __init__(self, print_func=print, input_func=input):
+  def __init__(self, print_func=print, input_func=input, dealer=None, user=None):
     """
     This is where most of the basic game set up should take place. Namely the creation of the deck as well as the dealer. For now we can also add the player.
     In: None
@@ -40,8 +40,8 @@ class Game:
     self.deck = Deck(deck_count=2)
 
     # Add the players that the game cares about
-    self.dealer = Dealer()
-    self.user = User(starting_bank = self.starting_bank)
+    self.dealer = dealer or Dealer()
+    self.user = user or User(starting_bank = self.starting_bank)
     self.round = 0
 
   def play(self):
@@ -51,61 +51,88 @@ class Game:
     Exceptions: None
     Out:
     """
-    print('\n')
-    self._print('Welcome to Black Jack!')
-    print('\n')
-    self._print(f'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.')
-    print('\n')
-    response = self._input('Would you like to play?: y/n ')
 
-    self.difficulty_level()
+    if not self.intro():
+      exit_game()
 
-    if response.lower() in self._valid_yes:
+    if not self.difficulty_level():
+      exit_game()
 
-      # Run the game loop
-      while self.user.get_bank() > 0 and self.user.get_bank() < self.score_goal:
-        self.turn()
-        if self.deck.deck_size() / 4 > self.deck.cards_remaining():
-          self.deck.shuffle()
+    # Run the game loop
+    while True:
+      self.turn()
 
+      if self.deck.deck_size() / 4 > self.deck.cards_remaining():
+        self.deck.shuffle()
+
+      # Goal met and may play more
       if self.user.get_bank() >= self.score_goal:
         self.start_endless()
+        break
 
+      # Game loss met and exit game
       if self.user.get_bank() <= 0:
         if self.user.get_max_bank() <= self.starting_bank:
           self._print(f'You had no net gain over {self.round} rounds.')
         else:
           self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
 
-    else:
-      self._print('Okay, come again!')
+        break
 
-    exit_game()
+
+  def intro(self):
+    """
+    Player sees introduction to Black Jack.
+    Out: (boolean) Should start game
+    """
+
+    self._print('Welcome to Black Jack!')
+    self._print('On easy difficulty you start with 100 chips and try to get to 250 chips.')
+    self._print('On hard difficulty you start with 50 chips and try to get to 500 chips.')
+
+    response = self._input('Do you want to play?')
+
+    if response not in self._valid_yes:
+      self._print('Okay, come again!')
+      return False
+
+    return True
 
 
   def difficulty_level(self):
+    """
+    Set the difficulty level for game.
+    Out: (boolean) Should start game
+    """
+
     valid_easy_responses = {'e', 'easy'}
     valid_hard_responses = {'h', 'hard'}
+
     while True:
-      level_response = self._input('Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ')
+      self._print('On easy difficulty you start with 100 chips and try to get to 250 chips.')
+      self._print('On hard difficulty you start with 50 chips and try to get to 500 chips.')
+
+      level_response = self._input('Which difficulty do you want to play on?')
 
       if level_response.lower() in valid_easy_responses:
-        self.user = User(starting_bank = 100)
+        self.starting_bank = 100
         self.score_goal = 250
-        break
+        self.user = User(starting_bank = self.starting_bank)
+        return True
 
       if level_response.lower() in valid_hard_responses:
-        self.user = User(starting_bank = 50)
+        self.starting_bank = 50
         self.score_goal = 500
-        break
+        self.user = User(starting_bank = self.starting_bank)
+        return True
 
       if level_response.lower() in self._valid_exit:
-        exit_game()
+        return False
 
-      self._print('Difficulty must be Easy or Hard')
+      self._print('Difficulty must be easy or hard.')
 
 
-  def iterate_round(self):
+  def increment_round(self):
     """
     Increment the round number
     In: None
@@ -144,9 +171,11 @@ class Game:
     In: None
     Out: None
     """
-    self.iterate_round()
+    self.increment_round()
 
-    self.place_user_bet()
+    if not self.place_user_bet(self.user.get_bank()):
+      exit_game()
+
     self.deal()
     self.user_turn()
 
@@ -157,13 +186,12 @@ class Game:
     self.reset_hands()
 
 
-  def place_user_bet(self):
+  def place_user_bet(self, current_bank):
     """
     Shows current bank, requests bet, handles edge cases
-    In: None
-    Out: None
+    In: (int) current_bank of player
+    Out: (boolean) Should exit game
     """
-    current_bank = self.user.get_bank()
 
     while True:
       print('\n')
@@ -173,14 +201,14 @@ class Game:
 
       # If the player wants to exit they can
       if player_bet.lower() in self._valid_exit:
-        exit_game()
+        return False
 
       if re.match(r'\s*[0-9]+\s*$', player_bet):
         player_bet = int(player_bet)
 
         if player_bet >= 1 and player_bet <= current_bank:
           self.user.place_bet(player_bet)
-          break
+          return True
 
         elif player_bet == 0:
           self._print('Your bet must be greater than 0')
