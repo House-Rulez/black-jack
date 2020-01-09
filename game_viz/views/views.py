@@ -58,7 +58,10 @@ class StartView(GameView):
     start_x = self.WIDTH/2
     start_y = self.HEIGHT/2
 
-    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to play?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to play?\n", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+
+    # self.play_button.draw()
+    # self.exit_button.draw()
 
     if self.play_button.pressed:
       self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
@@ -319,11 +322,11 @@ class ScoreView(GameView):
 
     for button in self.button_list:
       if isinstance(button, SubmitButton) and button.pressed:
-        if self.game.user.get_bank() <= 0 and not self.game.endless:
-          self.view.set_view(GameOver(self.view, self.WIDTH, self.HEIGHT))
+        if self.game.user.get_bank() <= 0:
+          self.view.set_view(LoseView(self.view, self.WIDTH, self.HEIGHT))
 
         elif self.game.user.get_bank() >= 250:
-          self.view.set_view(GameOver(self.view, self.WIDTH, self.HEIGHT))
+          self.view.set_view(WinView(self.view, self.WIDTH, self.HEIGHT))
 
         else:
           self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
@@ -332,6 +335,7 @@ class ScoreView(GameView):
 
 
 class GameOver(GameView):
+  """Class to display the when game is over"""
 
   def setup_theme(self):
       self.theme = Theme()
@@ -342,8 +346,8 @@ class GameOver(GameView):
   def on_show(self):
     self.setup_theme()
     arcade.set_background_color(arcade.color.AMETHYST)
-    self.play_button = PlayButton(550, 100, 80, 80, theme=self.theme, text='Restart')
-    self.exit_button = ExitButton(650, 100, 80, 80, theme=self.theme_2, text='exit')
+    self.play_button = PlayButton(self.WIDTH/2 - 100, self.HEIGHT/2 - 200, 150, 100, theme=self.theme, text='restart')
+    self.exit_button = ExitButton(self.WIDTH/2 + 100, self.HEIGHT/2 -200, 150, 100, theme=self.theme_2, text='exit')
     self.button_list.append(self.play_button)
     self.button_list.append(self.exit_button)
 
@@ -372,6 +376,17 @@ class GameOver(GameView):
       arcade.close_window()
 
 
+class WinView(GameOver):
+  """Class to display the view when user won the game, inherits form GameOver class"""
 
+  def on_draw(self):
+    super().on_draw()
+    arcade.draw_text("You won! Do you want to play again?\n", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
 
+class LoseView(GameOver):
+  """Class to display the view when user lose the game, inherits form GameOver class"""
+
+  def on_draw(self):
+    super().on_draw()
+    arcade.draw_text("You lose! Do you want to play again?\n", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
 
