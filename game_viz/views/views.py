@@ -1,8 +1,7 @@
-
-
 import arcade
-from arcade.gui import TextButton, Theme
+from arcade.gui import Theme
 from buttons import PlayButton, ExitButton, ValueButton, SubmitButton, HitButton, StandButton
+
 
 class GameView(arcade.View):
   """Class to create GameView instance"""
@@ -12,8 +11,6 @@ class GameView(arcade.View):
     self.WIDTH = WIDTH
     self.HEIGHT = HEIGHT
     self.game = view.game
-
-
 
 
 
@@ -55,7 +52,7 @@ class StartView(GameView):
     start_x = self.WIDTH/2
     start_y = self.HEIGHT/2
 
-    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to playg?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n\n Would you like to play?\n", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
     super().on_draw()
     self.play_button.draw()
     self.exit_button.draw()
@@ -65,6 +62,7 @@ class StartView(GameView):
 
     if self.exit_button.pressed:
       arcade.close_window()
+
 
 
 
@@ -78,19 +76,16 @@ class GameViewBid(GameView):
     self.bet = 1
     self.user_bank = self.game.user.get_bank()
     # place the deck image to the left of the screen
-    self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x, center_y=self.c_y)
+    self.deck_back = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x, center_y=self.c_y)
 
     # place 2 dealer's closed cards to the top of the screen
-    self.dealer_card_back1 = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y + HEIGHT/4 +30)
-    self.dealer_card_back2 = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 + 70, center_y=self.c_y + HEIGHT/4 + 30)
+    self.dealer_card_back1 = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y + HEIGHT/4 +30)
+    self.dealer_card_back2 = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x + WIDTH/3 + 70, center_y=self.c_y + HEIGHT/4 + 30)
 
     # # place 2 player's closed cards to the bottom of the screen
-    self.player_card_back1  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y - HEIGHT/4 - 30)
-    self.player_card_back2  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 +70, center_y=self.c_y - HEIGHT/4 - 30)
+    self.player_card_back1  = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y - HEIGHT/4 - 30)
+    self.player_card_back2  = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x + WIDTH/3 +70, center_y=self.c_y - HEIGHT/4 - 30)
 
-
-    # Place Bid section
-    
 
   def on_show(self):
     arcade.set_background_color(arcade.color.AMAZON)
@@ -110,6 +105,9 @@ class GameViewBid(GameView):
     decrease25_button = ValueButton(-25, 1050, 250, 80, 30)
     self.button_list.append(increase25_button)
     self.button_list.append(decrease25_button)
+
+    quit_button = ExitButton(100, 650, 90, 40, text="Quit")
+    self.button_list.append(quit_button)
 
     submit_button = SubmitButton(1000, 200, 90, 40, text="Submit")
     self.button_list.append(submit_button)
@@ -131,7 +129,6 @@ class GameViewBid(GameView):
     for button in self.button_list:
 
     # if player made input
-
       if isinstance(button, ValueButton) and button.on_release():
         if self.bet + button.get_value() < 1:
           continue
@@ -145,6 +142,9 @@ class GameViewBid(GameView):
       if isinstance(button, SubmitButton) and button.pressed:
         self.game.place_user_bet(self.bet)
         self.view.set_view(RoundView(self.view, self.WIDTH, self.HEIGHT))
+
+      if isinstance(button, ExitButton) and button.pressed:
+        arcade.close_window()
 
 
 class RoundView(GameView):
@@ -163,7 +163,7 @@ class RoundView(GameView):
     self.new_card_x = self.c_x
     self.new_card_y = self.c_y
 
-    self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
+    self.deck_back = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
     self.new_card = self.deck_back
 
   def on_show(self):
@@ -172,6 +172,9 @@ class RoundView(GameView):
     self.button_list.append(stand_button)
     hit_button = HitButton(self.WIDTH/2+100, self.HEIGHT/2, 110, 40, text="Hit")
     self.button_list.append(hit_button)
+
+    quit_button = ExitButton(100, 650, 90, 40, text="Quit")
+    self.button_list.append(quit_button)
 
   def on_draw(self):
     arcade.start_render()
@@ -203,6 +206,9 @@ class RoundView(GameView):
         # new_card_image = arcade.Sprite(f'img/{new_card.img}', scale=0.2,center_x=self.c_x, center_y=self.c_y)
 
         self.new_card = arcade.Sprite('img/9C.png', scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
+
+      if isinstance(button, ExitButton) and button.pressed:
+        arcade.close_window()
 
 
   def on_update(self, delta_time):
