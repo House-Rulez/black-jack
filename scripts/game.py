@@ -56,31 +56,32 @@ class Game:
     print('\n')
     self._print(f'You start off with a certain aount of chips (50 or 100) depending on the difficulty level. Try to make it to (250 or 500) chips by beating against the dealer\'s cards.')
     print('\n')
-    response = self._input('Would you like to play?: y/n ')
+    while True:
+      response = self._input('Would you like to play?: y/n ')
 
-    self.difficulty_level()
 
-    if response.lower() in self._valid_yes:
+      if response.lower() in self._valid_yes:
+        self.difficulty_level()
 
-      # Run the game loop
-      while self.user.get_bank() > 0 and self.user.get_bank() < self.score_goal:
-        self.turn()
-        if self.deck.deck_size() / 4 > self.deck.cards_remaining():
-          self.deck.shuffle()
+        # Run the game loop
+        while self.user.get_bank() > 0 and self.user.get_bank() < self.score_goal:
+          self.turn()
+          if self.deck.deck_size() / 4 > self.deck.cards_remaining():
+            self.deck.shuffle()
 
-      if self.user.get_bank() >= self.score_goal:
-        self.start_endless()
+        if self.user.get_bank() >= self.score_goal:
+          self.start_endless()
 
-      if self.user.get_bank() <= 0:
-        if self.user.get_max_bank() <= self.starting_bank:
-          self._print(f'You had no net gain over {self.round} rounds.')
-        else:
-          self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
+        if self.user.get_bank() <= 0:
+          if self.user.get_max_bank() <= self.starting_bank:
+            self._print(f'You had no net gain over {self.round} rounds.')
+          else:
+            self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
+            exit_game()
 
-    else:
-      self._print('Okay, come again!')
-
-    exit_game()
+      elif response.lower() == 'n':
+        self._print('Okay, come again!')
+        exit_game()
 
 
   def difficulty_level(self):
