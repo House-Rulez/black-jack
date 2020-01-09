@@ -83,9 +83,7 @@ class Game:
   def intro(self):
     """
     Player sees introduction to Black Jack.
-
-    Return:
-    boolean: Says the game loop should start.
+    Out: (boolean) Should start game
     """
 
     self._print('Welcome to Black Jack!')
@@ -104,6 +102,7 @@ class Game:
   def difficulty_level(self):
     """
     Set the difficulty level for game.
+    Out: (boolean) Should start game
     """
 
     valid_easy_responses = {'e', 'easy'}
@@ -190,7 +189,7 @@ class Game:
   def place_user_bet(self, current_bank):
     """
     Shows current bank, requests bet, handles edge cases
-    In: None
+    In: (int) current_bank of player
     Out: (boolean) Should exit game
     """
 
