@@ -19,7 +19,6 @@ class GameView(arcade.View):
     super().on_draw()
 
 
-
 class StartView(GameView):
   """Class to display the starting View for the game"""
 
@@ -38,14 +37,14 @@ class StartView(GameView):
     self.button_list.append(self.exit_button)
 
   def set_button_textures(self):
- #Play button
+    #Play button
     normal = "img/buttons/green.png"
     hover = "img/buttons/pink.png"
     clicked = "img/buttons/red.png"
     locked = "img/buttons/blue.png"
     self.theme.add_button_textures(normal, hover, clicked, locked)
 
-      #Exit button
+    #Exit button
     normal2 = "img/buttons/red.png"
     hover2 = "img/buttons/blue.png"
     clicked2 = "img/buttons/pink.png"
@@ -140,7 +139,11 @@ class BetView(GameView):
     # if player made input
       if isinstance(button, ValueButton) and button.on_release():
         if self.bet + button.get_value() < 1:
+          self.bet = 1
           continue
+
+        if self.bet == 1 and button.get_value() > 1:
+          self.bet -= 1
 
         if self.bet + button.get_value() >= self.user_bank:
           self.bet = self.user_bank
@@ -176,6 +179,7 @@ class RoundView(GameView):
 
   def on_show(self):
     self.game.reset_hands()
+    self.game.iterate_round()
     self.game.deal()
     stand_button = StandButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Stand")
     self.button_list.append(stand_button)
@@ -272,7 +276,7 @@ class ScoreView(GameView):
 
     # dEcide message based on result
     if result == None:
-      msg = 'It\s a tie'
+      msg = 'It\'s a tie'
     if result:
       msg = 'You won this hand'
     if result == False:
@@ -348,14 +352,14 @@ class GameOver(GameView):
     self.button_list.append(self.exit_button)
 
   def set_button_textures(self):
- #Play button
+    #Play button
     normal = "img/buttons/green.png"
     hover = "img/buttons/pink.png"
     clicked = "img/buttons/red.png"
     locked = "img/buttons/blue.png"
     self.theme.add_button_textures(normal, hover, clicked, locked)
 
-      #Exit button
+    #Exit button
     normal2 = "img/buttons/red.png"
     hover2 = "img/buttons/blue.png"
     clicked2 = "img/buttons/pink.png"

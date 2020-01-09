@@ -264,7 +264,7 @@ class User(Player):
     Exception: If the file is not found the game will skip saving the user data
     Out: .csv file with the information on the hand
     """
-    file_path = './notebooks/hand.csv'
+    file_path = './../notebooks/hand.csv'
     try:
       with open(file_path, mode="w") as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
