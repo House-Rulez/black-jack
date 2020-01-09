@@ -55,7 +55,7 @@ class StartView(GameView):
     start_x = self.WIDTH/2
     start_y = self.HEIGHT/2
 
-    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n Would you like to play?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to playg?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
     super().on_draw()
     self.play_button.draw()
     self.exit_button.draw()
@@ -90,8 +90,7 @@ class GameViewBid(GameView):
 
 
     # Place Bid section
-    self.text_list.append(arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center"))
-
+    
 
   def on_show(self):
     arcade.set_background_color(arcade.color.AMAZON)
@@ -125,8 +124,9 @@ class GameViewBid(GameView):
 
 
     super().on_draw()
+    arcade.draw_text(f"Place your bid:\n Your bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24, anchor_x="center")
 
-    arcade.draw_text(f"You're bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24)
+
 
     for button in self.button_list:
 
@@ -221,9 +221,12 @@ class RoundView(GameView):
     #add functionality to stand
     #If user hit "hit":
     # display the next card on top of the deck using deck.deal or self.game.user_hit?,
-    #move the displayed card to the user hand using on_update mb?
+    #move the displayed card to the user hand using on_update mb?(for the users card mb create a list in the class and append all new cards to it?)
+    #
 
 
+    # if user hit "stand":
+    # the dealer got his cards, the
 
 
 
