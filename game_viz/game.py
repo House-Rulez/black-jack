@@ -168,7 +168,7 @@ class Game:
   def dealer_hand(self):
     return self.dealer.hand
 
-  def user_turn(self, hit=False):
+  def user_hit(self, hit=False):
     """
     Handles the users decision to either hit and gain a card, or to stay and keep the cards they have.
     In: None

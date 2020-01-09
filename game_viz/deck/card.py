@@ -44,28 +44,36 @@ class Card:
 
   @staticmethod
   def set_image(name, suit):
-    return name + suit[0] + '.png'
+    return str(name) + suit[0] + '.png'
 
 
 class Spade(Card):
   def __init__(self, value):
     super(Spade, self).__init__(value)
     self.suit = 'Spades'
+    self.img = Card.set_image(self.name, self.suit)
+
 
 
 class Heart(Card):
   def __init__(self, value):
     super(Heart, self).__init__(value)
     self.suit = 'Hearts'
+    self.img = Card.set_image(self.name, self.suit)
+
 
 
 class Diamond(Card):
   def __init__(self, value):
     super(Diamond, self).__init__(value)
     self.suit = 'Diamonds'
+    self.img = Card.set_image(self.name, self.suit)
+
 
 
 class Club(Card):
   def __init__(self, value):
     super(Club, self).__init__(value)
     self.suit = 'Clubs'
+    self.img = Card.set_image(self.name, self.suit)
+
