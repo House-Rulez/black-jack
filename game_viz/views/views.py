@@ -325,7 +325,7 @@ class ScoreView(GameView):
         if self.game.user.get_bank() <= 0:
           self.view.set_view(LoseView(self.view, self.WIDTH, self.HEIGHT))
 
-        elif self.game.user.get_bank() >= 250:
+        elif self.game.user.get_bank() >= 250 and not self.game.endless:
           self.view.set_view(WinView(self.view, self.WIDTH, self.HEIGHT))
 
         else:
@@ -379,9 +379,17 @@ class GameOver(GameView):
 class WinView(GameOver):
   """Class to display the view when user won the game, inherits form GameOver class"""
 
+  def on_show(self):
+    super().on_show()
+    self.endless = SubmitButton(self.WIDTH/2, self.HEIGHT/2 -300, 150, 100, theme=self.theme_2, text='Start\nEndless')
+    self.button_list.append(self.endless)
+
   def on_draw(self):
     super().on_draw()
     arcade.draw_text("You won! Do you want to play again?\n", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+    if self.endless.pressed:
+      self.game.endless = True
+      self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
 
 class LoseView(GameOver):
   """Class to display the view when user lose the game, inherits form GameOver class"""
