@@ -111,27 +111,27 @@ class BetView(GameView):
     arcade.set_background_color(arcade.color.AMAZON)
 
 
-    increase1_button = ValueButton(1, 950, 400, 80, 30, '1', theme=self.theme)
-    decrease1_button = ValueButton(-1, 1050, 400, 80, 30, '-1', theme=self.theme)
+    increase1_button = ValueButton(1, 950, 450, 70, 70, '1', theme=self.theme)
+    decrease1_button = ValueButton(-1, 1050, 450, 70, 70, '-1', theme=self.theme)
     self.button_list.append(increase1_button)
     self.button_list.append(decrease1_button)
-    increase5_button = ValueButton(5, 950, 350, 80, 30, '5', theme=self.theme_2)
-    decrease5_button = ValueButton(-5, 1050, 350, 80, 30, '-5', theme=self.theme_2)
+    increase5_button = ValueButton(5, 950, 375, 70, 70, '5', theme=self.theme_2)
+    decrease5_button = ValueButton(-5, 1050, 375, 70, 70, '-5', theme=self.theme_2)
     self.button_list.append(increase5_button)
     self.button_list.append(decrease5_button)
-    increase10_button = ValueButton(10, 950, 300, 80, 30, '10', theme=self.theme_3)
-    decrease10_button = ValueButton(-10, 1050, 300, 80, 30, '-10', theme=self.theme_3)
+    increase10_button = ValueButton(10, 950, 300, 70, 70, '10', theme=self.theme_3)
+    decrease10_button = ValueButton(-10, 1050, 300, 70, 70, '-10', theme=self.theme_3)
     self.button_list.append(increase10_button)
     self.button_list.append(decrease10_button)
-    increase25_button = ValueButton(25, 950, 250, 80, 30, '25', theme=self.theme_4)
-    decrease25_button = ValueButton(-25, 1050, 250, 80, 30, '-25', theme=self.theme_4)
+    increase25_button = ValueButton(25, 950, 225, 70, 70, '25', theme=self.theme_4)
+    decrease25_button = ValueButton(-25, 1050, 225, 70, 70, '-25', theme=self.theme_4)
     self.button_list.append(increase25_button)
     self.button_list.append(decrease25_button)
 
     quit_button = ExitButton(100, 650, 90, 40, text="Quit")
     self.button_list.append(quit_button)
 
-    submit_button = SubmitButton(1000, 200, 90, 40, text="Submit")
+    submit_button = SubmitButton(1000, 150, 110, 40, text="Place Bet")
     self.button_list.append(submit_button)
 
   def set_button_textures(self):
@@ -331,7 +331,7 @@ class ScoreView(GameView):
     quit_button = ExitButton(100, 650, 90, 40, text="Quit")
     self.button_list.append(quit_button)
 
-    submit_button = SubmitButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Continue")
+    submit_button = SubmitButton(self.WIDTH/2, self.HEIGHT/2-50, 110, 40, text="Continue")
     self.button_list.append(submit_button)
   #   # hit_button = HitButton(self.WIDTH/2+100, self.HEIGHT/2, 110, 40, text="Hit")
   #   # self.button_list.append(hit_button)
