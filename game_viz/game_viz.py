@@ -7,7 +7,7 @@ import arcade
 from arcade.gui import *
 # TO DO Don't import star
 from game import Game
-from views import StartView
+from views import StartView, BetView
 
 # window Width
 WIDTH = 1200
@@ -44,6 +44,11 @@ class VizGame:
   def set_view(self, view):
     self.view = view
     self.window.show_view(self.view)
+
+  def restart_game(self):
+    self.game = Game()
+    self.set_view(BetView(self, WIDTH, HEIGHT))
+
 
 
 

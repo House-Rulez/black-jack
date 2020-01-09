@@ -23,9 +23,9 @@ class Game:
     Out: None
     """
     # Variables to control both the users starting bank as well as their goal
-    self.starting_bank = 100
+    self.starting_bank = 270
     self.score_goal = 250
-    self.game_over = False
+    self.endless = False
 
     # Override functions so you can create a wrapper around the program
     self._print = print_func
@@ -38,32 +38,6 @@ class Game:
     self.dealer = Dealer()
     self.user = User(starting_bank = self.starting_bank)
     self.round = 0
-
-  def play(self):
-    """
-    Start the game loop as well as any other set up that the user needs
-    In: None
-    Exceptions: None
-    Out:
-    """
-    # Run the game loop
-    while not self.game_over:
-      if self.user.get_bank() > 0 and self.user.get_bank() < self.score_goal:
-        self.game_over = True
-      self.turn()
-      if self.deck.deck_size() / 4 > self.deck.cards_remaining():
-        self.deck.shuffle()
-
-    if self.user.get_bank() >= self.score_goal:
-      self.start_endless()
-
-    if self.user.get_bank() <= 0:
-      if self.user.get_max_bank() <= self.starting_bank:
-        self._print(f'You had no net gain over {self.round} rounds.')
-      else:
-        self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
-        exit_game()
-
 
 
   def difficulty_level(self):
@@ -81,9 +55,6 @@ class Game:
         self.user = User(starting_bank = 50)
         self.score_goal = 500
         break
-
-      if level_response.lower() in self._valid_exit:
-        exit_game()
 
       self._print('Difficulty must be Easy or Hard')
 
@@ -107,40 +78,6 @@ class Game:
       self.deck.shuffle()
 
 
-  def start_endless(self):
-    """
-    This mode is made an option once the user passes the point where they have more points the the goal. It allows them to play until they go broke.
-    In: None
-    Out: None
-    """
-    self._print(f'You have beat the table in {self.round} hands')
-    response = self._input(f'You have {self.user.get_bank()} points. Would you like to continue? (y/n) ')
-    if response.lower() in self._valid_yes:
-      while self.user.get_bank() > 0:
-        self.turn()
-        if self.deck.deck_size() / 4 > self.deck.cards_remaining():
-          self.deck.shuffle()
-
-
-  def turn(self):
-    """
-    Runs through a turn of the game
-    In: None
-    Out: None
-    """
-    self.iterate_round()
-
-    self.place_user_bet()
-    self.deal()
-    self.user_turn()
-
-    self.dealer_turn()
-
-    self.calculate_winner()
-
-    self.reset_hands()
-
-
   def place_user_bet(self, value):
     """
     Shows current bank, requests bet, handles edge cases
@@ -162,6 +99,7 @@ class Game:
     for _ in range(0, 2):
       self.user.hit(self.deck.deal())
       self.dealer.hit(self.deck.deal())
+    self.save_game()
 
   def user_hand(self):
     return self.user.hand
@@ -202,11 +140,17 @@ class Game:
     """
 
     if self.user.bust():
-
       self.user.beat_dealer(False)
       return False
 
     else:
+      if self.user.blackjack() and not self.dealer.blackjack():
+        self.user.beat_dealer(True)
+        return True
+
+      if not self.user.blackjack() and self.dealer.blackjack():
+        self.user.beat_dealer(False)
+        return False
 
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
 
@@ -239,16 +183,3 @@ class Game:
     self.user.to_csv()
     self.deck.to_csv()
 
-
-def exit_game():
-  """
-  Allows the program to safely exit the program while running
-  """
-  sys.exit()
-
-
-if __name__ == "__main__":
-	"""The code that starts the game"""
-	game = Game()
-
-	game.play()
