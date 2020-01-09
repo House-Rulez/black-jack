@@ -19,10 +19,6 @@ class GameView(arcade.View):
     super().on_draw()
 
 
-
-
-
-
 class StartView(GameView):
   """Class to display the starting View for the game"""
 
@@ -41,14 +37,14 @@ class StartView(GameView):
     self.button_list.append(self.exit_button)
 
   def set_button_textures(self):
- #Play button
+    #Play button
     normal = "img/buttons/green.png"
     hover = "img/buttons/pink.png"
     clicked = "img/buttons/red.png"
     locked = "img/buttons/blue.png"
     self.theme.add_button_textures(normal, hover, clicked, locked)
 
-      #Exit button
+    #Exit button
     normal2 = "img/buttons/red.png"
     hover2 = "img/buttons/blue.png"
     clicked2 = "img/buttons/pink.png"
@@ -64,8 +60,8 @@ class StartView(GameView):
 
     arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to play?\n", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
 
-    self.play_button.draw()
-    self.exit_button.draw()
+    # self.play_button.draw()
+    # self.exit_button.draw()
 
     if self.play_button.pressed:
       self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
@@ -184,7 +180,11 @@ class BetView(GameView):
     # if player made input
       if isinstance(button, ValueButton) and button.on_release():
         if self.bet + button.get_value() < 1:
+          self.bet = 1
           continue
+
+        if self.bet == 1 and button.get_value() > 1:
+          self.bet -= 1
 
         if self.bet + button.get_value() >= self.user_bank:
           self.bet = self.user_bank
@@ -220,6 +220,7 @@ class RoundView(GameView):
 
   def on_show(self):
     self.game.reset_hands()
+    self.game.iterate_round()
     self.game.deal()
     stand_button = StandButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Stand")
     self.button_list.append(stand_button)
@@ -234,6 +235,7 @@ class RoundView(GameView):
     super().on_draw()
     arcade.draw_text(f"Your bank is {self.bank - self.user_bet}", 100, 100, arcade.color.BLACK, 24)
     arcade.draw_text(f"Your bet is {self.user_bet}", 100, 50, arcade.color.BLACK, 24)
+    arcade.draw_text(f"Your score is {self.game.user.get_score()}", 100, 150, arcade.color.BLACK, 24)
     self.deck_back.draw()
 
     user_hand = self.game.user_hand()
@@ -258,19 +260,17 @@ class RoundView(GameView):
     for button in self.button_list:
     # if player clicked "Hit"
       if isinstance(button, HitButton) and button.pressed:
-
         self.game.user_hit()
         button.pressed = False
+
       if self.game.user.bust():
         self.view.set_view(ScoreView(self.view, self.WIDTH, self.HEIGHT))
+        break
 
       if isinstance(button, StandButton) and button.pressed:
-
         self.game.dealer_turn()
         self.view.set_view(ScoreView(self.view, self.WIDTH, self.HEIGHT))
-
-
-
+        break
 
       if isinstance(button, ExitButton) and button.pressed:
         arcade.close_window()
@@ -297,7 +297,7 @@ class ScoreView(GameView):
     self.c_x = WIDTH/6
     self.c_y = HEIGHT/2
 
-    self.total_time = 0.0
+    # self.total_time = 0.0
 
     # self.bet = 1
     # self.game
@@ -317,7 +317,7 @@ class ScoreView(GameView):
 
     # dEcide message based on result
     if result == None:
-      msg = 'It\s a tie'
+      msg = 'It\'s a tie'
     if result:
       msg = 'You won this hand'
     if result == False:
@@ -339,6 +339,7 @@ class ScoreView(GameView):
   def on_draw(self):
     super().on_draw()
     arcade.draw_text(f"Your bank is {self.bank}", 100, 100, arcade.color.BLACK, 24)
+    arcade.draw_text(f"Your score is {self.game.user.get_score()}", 100, 150, arcade.color.BLACK, 24)
     self.deck_back.draw()
 
     user_hand = self.game.user_hand()
@@ -358,17 +359,17 @@ class ScoreView(GameView):
       card_image.draw()
 
 
-    arcade.draw_text(self.msg, self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24, anchor_x="center")
+    arcade.draw_text(self.msg, self.WIDTH/2, self.HEIGHT/2-10, arcade.color.BLACK, 24, anchor_x="center")
 
     self.new_card.draw()
 
     for button in self.button_list:
       if isinstance(button, SubmitButton) and button.pressed:
-        if self.game.user.get_bank() == 0:
-          self.view.set_view(GameOver(self.view, self.WIDTH, self.HEIGHT))
+        if self.game.user.get_bank() <= 0:
+          self.view.set_view(LoseView(self.view, self.WIDTH, self.HEIGHT))
 
-        elif self.game.user.get_bank() >= 250:
-          self.view.set_view(GameOver(self.view, self.WIDTH, self.HEIGHT))
+        elif self.game.user.get_bank() >= 250 and not self.game.endless:
+          self.view.set_view(WinView(self.view, self.WIDTH, self.HEIGHT))
 
         else:
           self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
@@ -380,9 +381,66 @@ class ScoreView(GameView):
 
 
 class GameOver(GameView):
+  """Class to display the when game is over"""
+
+  def setup_theme(self):
+      self.theme = Theme()
+      self.theme_2 = Theme()
+      self.theme.set_font(24, arcade.color.BLACK)
+      self.set_button_textures()
+
+  def on_show(self):
+    self.setup_theme()
+    arcade.set_background_color(arcade.color.AMETHYST)
+    self.play_button = PlayButton(self.WIDTH/2 - 100, self.HEIGHT/2 - 200, 150, 100, theme=self.theme, text='restart')
+    self.exit_button = ExitButton(self.WIDTH/2 + 100, self.HEIGHT/2 -200, 150, 100, theme=self.theme_2, text='exit')
+    self.button_list.append(self.play_button)
+    self.button_list.append(self.exit_button)
+
+  def set_button_textures(self):
+    #Play button
+    normal = "img/buttons/green.png"
+    hover = "img/buttons/pink.png"
+    clicked = "img/buttons/red.png"
+    locked = "img/buttons/blue.png"
+    self.theme.add_button_textures(normal, hover, clicked, locked)
+
+    #Exit button
+    normal2 = "img/buttons/red.png"
+    hover2 = "img/buttons/blue.png"
+    clicked2 = "img/buttons/pink.png"
+    locked2 = "img/buttons/green.png"
+    self.theme_2.add_button_textures(normal2, hover2, clicked2, locked2)
 
   def on_draw(self):
-    arcade.start_render()
+    super().on_draw()
+
+    if self.play_button.pressed:
+      self.view.restart_game()
+
+    if self.exit_button.pressed:
+      arcade.close_window()
 
 
+class WinView(GameOver):
+  """Class to display the view when user won the game, inherits form GameOver class"""
+
+  def on_show(self):
+    super().on_show()
+    self.endless = SubmitButton(self.WIDTH/2, self.HEIGHT/2 -300, 150, 100, theme=self.theme_2, text='Start\nEndless')
+    self.button_list.append(self.endless)
+
+  def on_draw(self):
+    super().on_draw()
+    arcade.draw_text("You won! Do you want to play again?\n", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+    if self.endless.pressed:
+      self.game.endless = True
+      self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
+
+class LoseView(GameOver):
+  """Class to display the view when user lose the game, inherits form GameOver class"""
+
+  def on_draw(self):
+    super().on_draw()
+    arcade.draw_text("You lose! Do you want to play again?\n", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
 

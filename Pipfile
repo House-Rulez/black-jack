@@ -4,7 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
 
 [packages]
 jupyter = "*"
@@ -13,6 +12,7 @@ matplotlib = "*"
 jupyterlab = "*"
 ipython = "*"
 pytest = "*"
+lab = "*"
 
 [requires]
 python_version = "3"
