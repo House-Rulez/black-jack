@@ -220,6 +220,7 @@ class RoundView(GameView):
 
   def on_show(self):
     self.game.reset_hands()
+    self.game.shuffle_deck()
     self.game.iterate_round()
     self.game.deal()
     stand_button = StandButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Stand")

@@ -74,7 +74,8 @@ class Game:
     In: None
     Out: None
     """
-    self.deck.shuffle()
+    if self.deck.deck_size() / 4 > self.deck.cards_remaining():
+      self.deck.shuffle()
 
 
   def place_user_bet(self, value):
