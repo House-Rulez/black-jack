@@ -80,9 +80,6 @@ class GameViewBid(arcade.View):
     self.player_card_back2  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 +140, center_y=self.c_y - HEIGHT/4 - 30)
 
 
-    # Place Bid section
-    self.text_list.append(arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center"))
-
     # TODO:Find out why place Bid Field doesn't work
     #  TODO: connect Place bid to the game
     # self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
@@ -92,10 +89,22 @@ class GameViewBid(arcade.View):
 
   def on_show(self):
     arcade.set_background_color(arcade.color.AMAZON)
-    increase1_button = ValueButton(1, 200, 200, 80, 30)
-    decrease1_button = ValueButton(-1, 400, 200, 80, 30)
+    increase1_button = ValueButton(1, 950, 400, 80, 30)
+    decrease1_button = ValueButton(-1, 1050, 400, 80, 30)
     self.button_list.append(increase1_button)
     self.button_list.append(decrease1_button)
+    increase5_button = ValueButton(5, 950, 350, 80, 30)
+    decrease5_button = ValueButton(-5, 1050, 350, 80, 30)
+    self.button_list.append(increase5_button)
+    self.button_list.append(decrease5_button)
+    increase10_button = ValueButton(10, 950, 300, 80, 30)
+    decrease10_button = ValueButton(-10, 1050, 300, 80, 30)
+    self.button_list.append(increase10_button)
+    self.button_list.append(decrease10_button)
+    increase25_button = ValueButton(25, 950, 250, 80, 30)
+    decrease25_button = ValueButton(-25, 1050, 250, 80, 30)
+    self.button_list.append(increase25_button)
+    self.button_list.append(decrease25_button)
 
   def on_draw(self):
     arcade.start_render()
@@ -108,7 +117,7 @@ class GameViewBid(arcade.View):
 
     super().on_draw()
 
-    arcade.draw_text(f"Your bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24)
+    arcade.draw_text(f"Place your bid:\n Your bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24, anchor_x="center")
 
     for button in self.button_list:
 
