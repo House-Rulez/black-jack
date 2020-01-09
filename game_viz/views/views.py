@@ -35,8 +35,8 @@ class StartView(GameView):
   def on_show(self):
     self.setup_theme()
     arcade.set_background_color(arcade.color.AMETHYST)
-    self.play_button = PlayButton(550, 100, 80, 80, theme=self.theme, text='play')
-    self.exit_button = ExitButton(650, 100, 80, 80, theme=self.theme_2, text='exit')
+    self.play_button = PlayButton(550, 100, 90, 90, theme=self.theme, text='\nPlay\n')
+    self.exit_button = ExitButton(650, 100, 90, 90, theme=self.theme_2, text='Exit')
     self.button_list.append(self.play_button)
     self.button_list.append(self.exit_button)
 
