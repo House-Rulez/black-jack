@@ -7,7 +7,7 @@ import arcade
 from arcade.gui import *
 # TO DO Don't import star
 from game import Game
-from views import StartView, GameViewBid
+from views import StartView, BetView
 
 # window Width
 WIDTH = 1200
@@ -38,28 +38,7 @@ class VizGame:
     arcade.run()
 
 
-  def _print(self, *args):
-
-    msg = args[0]
-
-    if msg == 'how much would you like to bet?':
-      self.view = GameViewBid(WIDTH, HEIGHT)
-      self.window.show_view(self.view)
-
-  def _input(self, *args):
-    prompt = args[0]
-
-    ########## TODO: Check if it is actually sends the answer to the game
-
-    if prompt == 'Would you like to play?: y/n':
-      print('Button Press')
-      if self.view.start_game:
-        self.view = GameViewBid(WIDTH, HEIGHT)
-        self.window.show_view(self.view)
-        return 'y'
-    else:
-      return 'e'
-
+  
 
 
 if __name__ == "__main__":

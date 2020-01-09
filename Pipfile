@@ -13,6 +13,7 @@ matplotlib = "*"
 jupyterlab = "*"
 ipython = "*"
 pytest = "*"
+lab = "*"
 
 [requires]
 python_version = "3"

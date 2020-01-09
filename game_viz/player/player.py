@@ -90,7 +90,7 @@ class Player:
     score = 0
     aces = 0
     for card in self.hand:
-      if card.name == 'Ace':
+      if card.name == 'A':
         aces += 1
       else:
         score += card.value

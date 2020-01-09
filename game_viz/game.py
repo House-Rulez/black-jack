@@ -121,23 +121,6 @@ class Game:
           self.deck.shuffle()
 
 
-  def turn(self):
-    """
-    Runs through a turn of the game
-    In: None
-    Out: None
-    """
-    self.iterate_round()
-
-    self.place_user_bet()
-    self.deal()
-    self.user_turn()
-
-    self.dealer_turn()
-
-    self.calculate_winner()
-
-    self.reset_hands()
 
 
   def place_user_bet(self, value):
@@ -201,11 +184,17 @@ class Game:
     """
 
     if self.user.bust():
-
       self.user.beat_dealer(False)
       return False
 
     else:
+      if self.user.blackjack() and not self.dealer.blackjack():
+        self.user.beat_dealer(True)
+        return True
+
+      if not self.user.blackjack() and self.dealer.blackjack():
+        self.user.beat_dealer(False)
+        return False
 
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
 
