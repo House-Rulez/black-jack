@@ -9,6 +9,7 @@ class StartView(arcade.View):
     self.game = game
     self.WIDTH = WIDTH
     self.HEIGHT = HEIGHT
+    self.start_game = False
 
   def setup_theme(self):
       self.theme = Theme()
@@ -56,8 +57,6 @@ class StartView(arcade.View):
         arcade.close_window()
 
 
-
-
 class GameViewBid(arcade.View):
   """Class to display the game view for the game"""
 
@@ -80,7 +79,12 @@ class GameViewBid(arcade.View):
     self.player_card_back2  = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.c_x + WIDTH/3 +140, center_y=self.c_y - HEIGHT/4 - 30)
 
 
-    # TODO:Find out why place Bid Field doesn't work
+   # TODO:Find out why place Bid Field doesn't work
+
+    # Place Bid section
+    self.text_list.append(arcade.gui.Text("Place your bid: ", WIDTH/2, HEIGHT/2, arcade.color.BLACK, font_size=20, anchor_x="center"))
+
+
     #  TODO: connect Place bid to the game
     # self.textbox_list.append(arcade.gui.TextBox(WIDTH/2 - 90, HEIGHT/2, width=50, height=40, theme=None, outline_color=arcade.color.BLACK))
 
@@ -105,6 +109,10 @@ class GameViewBid(arcade.View):
     decrease25_button = ValueButton(-25, 1050, 250, 80, 30)
     self.button_list.append(increase25_button)
     self.button_list.append(decrease25_button)
+    exit_button = ExitButton(650, 100, 80, 80, None, text='quit')
+    self.button_list.append(exit_button)
+
+
 
   def on_draw(self):
     arcade.start_render()
@@ -127,7 +135,8 @@ class GameViewBid(arcade.View):
           continue
         # print(self.button_list[0].on_release)
         self.bet += button.get_value()
-
+      if self.exit_button.pressed:
+        arcade.close_window()
 
   # def on_submit(self):
   #       self.text = "5"
