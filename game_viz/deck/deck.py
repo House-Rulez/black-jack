@@ -188,7 +188,7 @@ class Deck:
       self.deck.enqueue(card)
       return card
 
-    file_path = './notebooks/deck.csv'
+    file_path = './../notebooks/deck.csv'
     try:
       with open(file_path, mode="w") as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)

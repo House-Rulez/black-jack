@@ -6,8 +6,13 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-arcade = "*"
-dataclasses = "*"
+jupyter = "*"
+pandas = "*"
+matplotlib = "*"
+jupyterlab = "*"
+ipython = "*"
+pytest = "*"
+lab = "*"
 
 [requires]
 python_version = "3"
