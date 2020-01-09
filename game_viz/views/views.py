@@ -151,12 +151,14 @@ class RoundView(GameView):
 
     user_hand = self.game.user_hand()
     dealer_hand = self.game.dealer_hand()
-    for card in user_hand:
-      card_image = arcade.Sprite(f'img/{card.img}',scale=0.2,center_x=self.c_x, center_y=self.c_y)
+
+    for i,card in enumerate(user_hand):
+      card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + i*40, center_y=self.c_y)
       card_image.draw()
 
-
-
+    for i,card in enumerate(dealer_hand):
+      card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + i*40, center_y=self.c_y + 200)
+      card_image.draw()
 
 
 
