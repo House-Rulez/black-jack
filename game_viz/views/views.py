@@ -331,7 +331,7 @@ class ScoreView(GameView):
     quit_button = ExitButton(100, 650, 90, 40, text="Quit")
     self.button_list.append(quit_button)
 
-    submit_button = SubmitButton(self.WIDTH/2, self.HEIGHT/2-50, 110, 40, text="Continue")
+    submit_button = SubmitButton(self.WIDTH/2+200, self.HEIGHT/2+15, 110, 40, text="Continue")
     self.button_list.append(submit_button)
   #   # hit_button = HitButton(self.WIDTH/2+100, self.HEIGHT/2, 110, 40, text="Hit")
   #   # self.button_list.append(hit_button)
