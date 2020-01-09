@@ -109,6 +109,10 @@ class GameViewBid(arcade.View):
     decrease25_button = ValueButton(-25, 1050, 250, 80, 30)
     self.button_list.append(increase25_button)
     self.button_list.append(decrease25_button)
+    exit_button = ExitButton(650, 100, 80, 80, None, text='quit')
+    self.button_list.append(exit_button)
+
+
 
   def on_draw(self):
     arcade.start_render()
@@ -131,7 +135,8 @@ class GameViewBid(arcade.View):
           continue
         # print(self.button_list[0].on_release)
         self.bet += button.get_value()
-
+      if self.exit_button.pressed:
+        arcade.close_window()
 
   # def on_submit(self):
   #       self.text = "5"
