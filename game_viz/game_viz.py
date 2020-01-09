@@ -7,7 +7,7 @@ import arcade
 from arcade.gui import *
 # TO DO Don't import star
 from game import Game
-from views import StartView, GameViewBid
+from views import StartView
 
 # window Width
 WIDTH = 1200

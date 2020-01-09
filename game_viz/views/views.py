@@ -12,6 +12,15 @@ class GameView(arcade.View):
     self.WIDTH = WIDTH
     self.HEIGHT = HEIGHT
     self.game = view.game
+    self.bank = self.game.user.get_bank()
+    self.user_bet = self.game.user.get_bet()
+
+  def on_draw(self):
+    arcade.start_render()
+    super().on_draw()
+
+
+
 
 
 
@@ -51,24 +60,24 @@ class StartView(GameView):
 
 
   def on_draw(self):
-    arcade.start_render()
+    super().on_draw()
+
     start_x = self.WIDTH/2
     start_y = self.HEIGHT/2
 
     arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to playg?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
-    super().on_draw()
     self.play_button.draw()
     self.exit_button.draw()
 
     if self.play_button.pressed:
-      self.view.set_view(GameViewBid(self.view, self.WIDTH, self.HEIGHT))
+      self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
 
     if self.exit_button.pressed:
       arcade.close_window()
 
 
 
-class GameViewBid(GameView):
+class BetView(GameView):
   """Class to display the game view for the "Make a Bid" screen"""
 
   def __init__(self,view, WIDTH, HEIGHT):
@@ -90,7 +99,7 @@ class GameViewBid(GameView):
 
 
     # Place Bid section
-    
+
 
   def on_show(self):
     arcade.set_background_color(arcade.color.AMAZON)
@@ -115,7 +124,9 @@ class GameViewBid(GameView):
     self.button_list.append(submit_button)
 
   def on_draw(self):
-    arcade.start_render()
+    super().on_draw()
+    arcade.draw_text(f"Your bank is {self.bank - self.bet}", 100, 100, arcade.color.BLACK, 24)
+
     self.deck_back.draw()
     self.dealer_card_back1.draw()
     self.dealer_card_back2.draw()
@@ -123,7 +134,6 @@ class GameViewBid(GameView):
     self.player_card_back2.draw()
 
 
-    super().on_draw()
     arcade.draw_text(f"Place your bid:\n Your bet is {self.bet}", self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24, anchor_x="center")
 
 
@@ -157,8 +167,7 @@ class RoundView(GameView):
     self.c_y = HEIGHT/2
 
     self.total_time = 0.0
-    # self.bet = 1
-    # self.game
+
 
     self.new_card_x = self.c_x
     self.new_card_y = self.c_y
@@ -167,28 +176,36 @@ class RoundView(GameView):
     self.new_card = self.deck_back
 
   def on_show(self):
+    self.game.reset_hands()
     self.game.deal()
     stand_button = StandButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Stand")
     self.button_list.append(stand_button)
+
     hit_button = HitButton(self.WIDTH/2+100, self.HEIGHT/2, 110, 40, text="Hit")
     self.button_list.append(hit_button)
 
   def on_draw(self):
-    arcade.start_render()
+    super().on_draw()
+    arcade.draw_text(f"Your bank is {self.bank - self.user_bet}", 100, 100, arcade.color.BLACK, 24)
+    arcade.draw_text(f"Your bet is {self.user_bet}", 100, 50, arcade.color.BLACK, 24)
     self.deck_back.draw()
 
     user_hand = self.game.user_hand()
     dealer_hand = self.game.dealer_hand()
 
     for i,card in enumerate(dealer_hand):
+
       card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
+
+      if i == 0:
+        card_image = arcade.Sprite('img/purple_back.png', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
+
       card_image.draw()
 
     for i,card in enumerate(user_hand):
       card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y - self.HEIGHT/4-30)
       card_image.draw()
 
-    super().on_draw()
 
     self.new_card.draw()
 
@@ -196,13 +213,18 @@ class RoundView(GameView):
     # if player clicked "Hit"
       if isinstance(button, HitButton) and button.pressed:
 
-        # TO DO DODODODODODO
-        # #######################################
-        # new_card = self.game.user_hit(hit=True)
-        # print(new_card)
-        # new_card_image = arcade.Sprite(f'img/{new_card.img}', scale=0.2,center_x=self.c_x, center_y=self.c_y)
+        self.game.user_hit()
+        button.pressed = False
+      if self.game.user.bust():
+        self.view.set_view(ScoreView(self.view, self.WIDTH, self.HEIGHT))
 
-        self.new_card = arcade.Sprite('img/9C.png', scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
+      if isinstance(button, StandButton) and button.pressed:
+
+        self.game.dealer_turn()
+        self.view.set_view(ScoreView(self.view, self.WIDTH, self.HEIGHT))
+
+
+
 
 
   def on_update(self, delta_time):
@@ -216,17 +238,97 @@ class RoundView(GameView):
       # if self.new_card_x == (self.c_x + self.WIDTH/3 + 140) and self.new_card_y == (self.c_y - self.HEIGHT/4-30):
       #   return
 
-    # create hit and stand buttons
-    #add functionality to hit
-    #add functionality to stand
-    #If user hit "hit":
-    # display the next card on top of the deck using deck.deal or self.game.user_hit?,
-    #move the displayed card to the user hand using on_update mb?(for the users card mb create a list in the class and append all new cards to it?)
-    #
 
 
-    # if user hit "stand":
-    # the dealer got his cards, the
+class ScoreView(GameView):
+  def __init__(self,view, WIDTH, HEIGHT):
+    super().__init__(view, WIDTH, HEIGHT)
+    self.WIDTH = WIDTH
+    self.HEIGHT = HEIGHT
+    self.c_x = WIDTH/6
+    self.c_y = HEIGHT/2
+
+    self.total_time = 0.0
+
+    # self.bet = 1
+    # self.game
+
+    self.new_card_x = self.c_x
+    self.new_card_y = self.c_y
+
+    self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
+    self.new_card = self.deck_back
+
+  def on_show(self):
+    result = self.game.calculate_winner()
+    self.bank = self.game.user.get_bank()
+
+    #create message variable
+    msg = ''
+
+    # dEcide message based on result
+    if result == None:
+      msg = 'It\s a tie'
+    if result:
+      msg = 'You won this hand'
+    if result == False:
+      if self.game.user.bust():
+        msg = 'You bust'
+      else:
+        msg = 'The dealer won'
+
+    self.msg = msg
+
+
+    submit_button = SubmitButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Continue")
+    self.button_list.append(submit_button)
+  #   # hit_button = HitButton(self.WIDTH/2+100, self.HEIGHT/2, 110, 40, text="Hit")
+  #   # self.button_list.append(hit_button)
+
+  def on_draw(self):
+    super().on_draw()
+    arcade.draw_text(f"Your bank is {self.bank}", 100, 100, arcade.color.BLACK, 24)
+    self.deck_back.draw()
+
+    user_hand = self.game.user_hand()
+    dealer_hand = self.game.dealer_hand()
+
+    for i,card in enumerate(dealer_hand):
+
+      card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
+
+      if i == 0 and self.game.user.bust():
+        card_image = arcade.Sprite('img/purple_back.png', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
+
+      card_image.draw()
+
+    for i,card in enumerate(user_hand):
+      card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y - self.HEIGHT/4-30)
+      card_image.draw()
+
+
+    arcade.draw_text(self.msg, self.WIDTH/2, self.HEIGHT/2, arcade.color.BLACK, 24, anchor_x="center")
+
+    self.new_card.draw()
+
+    for button in self.button_list:
+      if isinstance(button, SubmitButton) and button.pressed:
+        if self.game.user.get_bank() == 0:
+          self.view.set_view(GameOver(self.view, self.WIDTH, self.HEIGHT))
+
+        elif self.game.user.get_bank() >= 250:
+          self.view.set_view(GameOver(self.view, self.WIDTH, self.HEIGHT))
+
+        else:
+          self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
+
+
+
+
+class GameOver(GameView):
+
+  def on_draw(self):
+    arcade.start_render()
 
 
 

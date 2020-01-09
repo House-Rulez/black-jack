@@ -168,23 +168,14 @@ class Game:
   def dealer_hand(self):
     return self.dealer.hand
 
-  def user_hit(self, hit=False):
+  def user_hit(self):
     """
     Handles the users decision to either hit and gain a card, or to stay and keep the cards they have.
     In: None
     Out: None
     """
-    while not self.user.bust():
-      self.save_game()
-
-
-      # If the player wants to exit they can
-
-      if not hit:
-        return
-      else:
-        self.user.hit(self.deck.deal())
-
+    self.user.hit(self.deck.deal())
+    self.save_game()
 
 
 
@@ -208,28 +199,23 @@ class Game:
     In: None
     Out: Changes the value in the Player's bank
     """
-    print('\n')
-    self._print(f'Your last hand is:\n{str(self.user)}')
-    self._print(f'Your score is {self.user.get_score()}')
+
     if self.user.bust():
-      self._print('You have bust')
+
       self.user.beat_dealer(False)
+      return False
 
     else:
-      self._print(f'The Dealer\'s hand is:\n{str(self.dealer)}')
-      self._print(f'Dealer has {self.dealer.get_score()} points')
+
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
-        self._print(f'It was a tie\nYou don\'t gain or lose points')
-        return
+
+        return None
 
       result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()
       self.user.beat_dealer(result)
-      if self.dealer.bust():
-        self._print('The Dealer bust')
-      if result:
-        self._print('You beat the Dealer')
-      else:
-        self._print('You lost this hand')
+
+      return result
+
 
 
   def reset_hands(self):
