@@ -20,9 +20,6 @@ class GameView(arcade.View):
 
 
 
-
-
-
 class StartView(GameView):
   """Class to display the starting View for the game"""
 
