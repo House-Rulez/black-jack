@@ -35,8 +35,8 @@ class StartView(GameView):
   def on_show(self):
     self.setup_theme()
     arcade.set_background_color(arcade.color.AMETHYST)
-    self.play_button = PlayButton(550, 100, 80, 80, theme=self.theme, text='play')
-    self.exit_button = ExitButton(650, 100, 80, 80, theme=self.theme_2, text='exit')
+    self.play_button = PlayButton(550, 100, 90, 90, theme=self.theme, text='\nPlay\n')
+    self.exit_button = ExitButton(650, 100, 90, 90, theme=self.theme_2, text='Exit')
     self.button_list.append(self.play_button)
     self.button_list.append(self.exit_button)
 
@@ -62,7 +62,7 @@ class StartView(GameView):
     start_x = self.WIDTH/2
     start_y = self.HEIGHT/2
 
-    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to playg?", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
+    arcade.draw_text("Welcome to Black Jack! \n You start off with 100 chips.\n Try to make it to 250 chips by beating the dealer\'s cards.\n \nWould you like to play?\n", start_x, start_y, arcade.color.BLACK, font_size=30, anchor_x="center", anchor_y="center", align='center')
 
     self.play_button.draw()
     self.exit_button.draw()
@@ -96,32 +96,73 @@ class BetView(GameView):
     self.player_card_back1  = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x + WIDTH/3, center_y=self.c_y - HEIGHT/4 - 30)
     self.player_card_back2  = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.c_x + WIDTH/3 +70, center_y=self.c_y - HEIGHT/4 - 30)
 
+  def setup_theme(self):
+        self.theme = Theme()
+        self.theme_2 = Theme()
+        self.theme_3 = Theme()
+        self.theme_4 = Theme()
+        self.theme.set_font(24, arcade.color.BLACK)
+        self.set_button_textures()
+
 
 
   def on_show(self):
+    self.setup_theme()
     arcade.set_background_color(arcade.color.AMAZON)
-    increase1_button = ValueButton(1, 950, 400, 80, 30)
-    decrease1_button = ValueButton(-1, 1050, 400, 80, 30)
+
+
+    increase1_button = ValueButton(1, 950, 450, 70, 70, '1', theme=self.theme)
+    decrease1_button = ValueButton(-1, 1050, 450, 70, 70, '-1', theme=self.theme)
     self.button_list.append(increase1_button)
     self.button_list.append(decrease1_button)
-    increase5_button = ValueButton(5, 950, 350, 80, 30)
-    decrease5_button = ValueButton(-5, 1050, 350, 80, 30)
+    increase5_button = ValueButton(5, 950, 375, 70, 70, '5', theme=self.theme_2)
+    decrease5_button = ValueButton(-5, 1050, 375, 70, 70, '-5', theme=self.theme_2)
     self.button_list.append(increase5_button)
     self.button_list.append(decrease5_button)
-    increase10_button = ValueButton(10, 950, 300, 80, 30)
-    decrease10_button = ValueButton(-10, 1050, 300, 80, 30)
+    increase10_button = ValueButton(10, 950, 300, 70, 70, '10', theme=self.theme_3)
+    decrease10_button = ValueButton(-10, 1050, 300, 70, 70, '-10', theme=self.theme_3)
     self.button_list.append(increase10_button)
     self.button_list.append(decrease10_button)
-    increase25_button = ValueButton(25, 950, 250, 80, 30)
-    decrease25_button = ValueButton(-25, 1050, 250, 80, 30)
+    increase25_button = ValueButton(25, 950, 225, 70, 70, '25', theme=self.theme_4)
+    decrease25_button = ValueButton(-25, 1050, 225, 70, 70, '-25', theme=self.theme_4)
     self.button_list.append(increase25_button)
     self.button_list.append(decrease25_button)
 
     quit_button = ExitButton(100, 650, 90, 40, text="Quit")
     self.button_list.append(quit_button)
 
-    submit_button = SubmitButton(1000, 200, 90, 40, text="Submit")
+    submit_button = SubmitButton(1000, 150, 110, 40, text="Place Bet")
     self.button_list.append(submit_button)
+
+  def set_button_textures(self):
+  #Bet 1 or -1
+    normal = "img/red-chip.png"
+    hover = "img/red-chip.png"
+    clicked = "img/red-chip.png"
+    locked = "img/red-chip.png"
+    self.theme.add_button_textures(normal, hover, clicked, locked)
+
+  #Bet 5 or -5
+    normal2 = "img/lightblue-chip.png"
+    hover2 = "img/lightblue-chip.png"
+    clicked2 = "img/lightblue-chip.png"
+    locked2 = "img/lightblue-chip.png"
+    self.theme_2.add_button_textures(normal2, hover2, clicked2, locked2)
+
+  #Bet 10 or -10
+    normal2 = "img/lightgreen-ship.png"
+    hover2 = "img/lightgreen-ship.png"
+    clicked2 = "img/lightgreen-ship.png"
+    locked2 = "img/lightgreen-ship.png"
+    self.theme_3.add_button_textures(normal2, hover2, clicked2, locked2)
+
+  #Bet 25 or -25
+    normal2 = "img/black-chip.png"
+    hover2 = "img/black-chip.png"
+    clicked2 = "img/black-chip.png"
+    locked2 = "img/black-chip.png"
+    self.theme_4.add_button_textures(normal2, hover2, clicked2, locked2)
+
 
   def on_draw(self):
     super().on_draw()
@@ -203,7 +244,7 @@ class RoundView(GameView):
       card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
 
       if i == 0:
-        card_image = arcade.Sprite('img/purple_back.png', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
+        card_image = arcade.Sprite('img/bees.png', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
 
       card_image.draw()
 
@@ -264,7 +305,7 @@ class ScoreView(GameView):
     self.new_card_x = self.c_x
     self.new_card_y = self.c_y
 
-    self.deck_back = arcade.Sprite('img/purple_back.png',scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
+    self.deck_back = arcade.Sprite('img/bees.png',scale=0.2,center_x=self.new_card_x, center_y=self.new_card_y)
     self.new_card = self.deck_back
 
   def on_show(self):
@@ -287,8 +328,10 @@ class ScoreView(GameView):
 
     self.msg = msg
 
+    quit_button = ExitButton(100, 650, 90, 40, text="Quit")
+    self.button_list.append(quit_button)
 
-    submit_button = SubmitButton(self.WIDTH/2-40, self.HEIGHT/2, 110, 40, text="Continue")
+    submit_button = SubmitButton(self.WIDTH/2, self.HEIGHT/2-50, 110, 40, text="Continue")
     self.button_list.append(submit_button)
   #   # hit_button = HitButton(self.WIDTH/2+100, self.HEIGHT/2, 110, 40, text="Hit")
   #   # self.button_list.append(hit_button)
@@ -306,7 +349,7 @@ class ScoreView(GameView):
       card_image = arcade.Sprite(f'img/{card.img}', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
 
       if i == 0 and self.game.user.bust():
-        card_image = arcade.Sprite('img/purple_back.png', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
+        card_image = arcade.Sprite('img/bees.png', scale=0.2,center_x=self.c_x + self.WIDTH/3 + i*70, center_y=self.c_y + self.HEIGHT/4+30)
 
       card_image.draw()
 
@@ -329,6 +372,9 @@ class ScoreView(GameView):
 
         else:
           self.view.set_view(BetView(self.view, self.WIDTH, self.HEIGHT))
+
+      if isinstance(button, ExitButton) and button.pressed:
+        arcade.close_window()
 
 
 
