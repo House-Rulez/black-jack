@@ -4,6 +4,7 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/./deck/')
 sys.path.insert(1, myPath + '/./player/')
 
+
 import re
 from deck import Deck
 from player import User, Dealer
@@ -13,13 +14,6 @@ class Game:
   This is the main controller for Black Jack. It handles the creation of the Deck, Dealer, and User.
   As well as managing the main parts of the game flow.
   """
-
-  # Used to give the user different options for answering prompts
-  _valid_exit = {'exit', 'exit()', 'leave', 'quit', 'q'}
-  _valid_yes = {'y', 'yes', 'yeah', 'ok', 'sure'}
-  _valid_hit = {'h', 'hit', 'deal', 'hit me'}
-  _valid_stay = {'s', 'stay', 'stop'}
-
 
   def __init__(self, print_func=print, input_func=input):
     """
@@ -31,6 +25,7 @@ class Game:
     # Variables to control both the users starting bank as well as their goal
     self.starting_bank = 100
     self.score_goal = 250
+    self.game_over = False
 
     # Override functions so you can create a wrapper around the program
     self._print = print_func
@@ -51,89 +46,49 @@ class Game:
     Exceptions: None
     Out:
     """
-
-    if not self.intro():
-      exit_game()
-
-    if not self.difficulty_level():
-      exit_game()
-
     # Run the game loop
-    while True:
+    while not self.game_over:
+      if self.user.get_bank() > 0 and self.user.get_bank() < self.score_goal:
+        self.game_over = True
       self.turn()
-
       if self.deck.deck_size() / 4 > self.deck.cards_remaining():
         self.deck.shuffle()
 
-      # Goal met and may play more
-      if self.user.get_bank() >= self.score_goal:
-        self.start_endless()
-        break
+    if self.user.get_bank() >= self.score_goal:
+      self.start_endless()
 
-      # Game loss met and exit game
-      if self.user.get_bank() <= 0:
-        if self.user.get_max_bank() <= self.starting_bank:
-          self._print(f'You had no net gain over {self.round} rounds.')
-        else:
-          self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
-          exit_game()
+    if self.user.get_bank() <= 0:
+      if self.user.get_max_bank() <= self.starting_bank:
+        self._print(f'You had no net gain over {self.round} rounds.')
+      else:
+        self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
+        exit_game()
 
-        break
-
-
-  def intro(self):
-    """
-    Player sees introduction to Black Jack.
-    Out: (boolean) Should start game
-    """
-
-    self._print('Welcome to Black Jack!')
-    self._print('On easy difficulty you start with 100 chips and try to get to 250 chips.')
-    self._print('On hard difficulty you start with 50 chips and try to get to 500 chips.')
-
-    response = self._input('Do you want to play?')
-
-    if response not in self._valid_yes:
-      self._print('Okay, come again!')
-      return False
-
-    return True
 
 
   def difficulty_level(self):
-    """
-    Set the difficulty level for game.
-    Out: (boolean) Should start game
-    """
-
     valid_easy_responses = {'e', 'easy'}
     valid_hard_responses = {'h', 'hard'}
-
     while True:
-      self._print('On easy difficulty you start with 100 chips and try to get to 250 chips.')
-      self._print('On hard difficulty you start with 50 chips and try to get to 500 chips.')
-
-      level_response = self._input('Which difficulty do you want to play on?')
+      level_response = self._input('Which difficulty? \nEasy: start with 100 chips, and goal is 250 chips \nHard: start with 50 chips, and goal is 500 chips \nPress (e) or (h): ')
 
       if level_response.lower() in valid_easy_responses:
-        self.starting_bank = 100
+        self.user = User(starting_bank = 100)
         self.score_goal = 250
-        self.user = User(starting_bank = self.starting_bank)
-        return True
+        break
 
       if level_response.lower() in valid_hard_responses:
-        self.starting_bank = 50
+        self.user = User(starting_bank = 50)
         self.score_goal = 500
-        self.user = User(starting_bank = self.starting_bank)
-        return True
+        break
 
       if level_response.lower() in self._valid_exit:
-        return False
+        exit_game()
 
-      self._print('Difficulty must be easy or hard.')
+      self._print('Difficulty must be Easy or Hard')
 
 
-  def increment_round(self):
+  def iterate_round(self):
     """
     Increment the round number
     In: None
@@ -172,11 +127,9 @@ class Game:
     In: None
     Out: None
     """
-    self.increment_round()
+    self.iterate_round()
 
-    if not self.place_user_bet(self.user.get_bank()):
-      exit_game()
-
+    self.place_user_bet()
     self.deal()
     self.user_turn()
 
@@ -187,38 +140,16 @@ class Game:
     self.reset_hands()
 
 
-  def place_user_bet(self, current_bank):
+  def place_user_bet(self, value):
     """
     Shows current bank, requests bet, handles edge cases
-    In: (int) current_bank of player
-    Out: (boolean) Should exit game
+    In: None
+    Out: None
     """
+    current_bank = self.user.get_bank()
 
-    while True:
-      print('\n')
-      self._print(f'Your current bank is {current_bank}')
-      self._print('how much would you like to bet?')
-      player_bet = self._input('Bet: ')
-
-      # If the player wants to exit they can
-      if player_bet.lower() in self._valid_exit:
-        return False
-
-      if re.match(r'\s*[0-9]+\s*$', player_bet):
-        player_bet = int(player_bet)
-
-        if player_bet >= 1 and player_bet <= current_bank:
-          self.user.place_bet(player_bet)
-          return True
-
-        elif player_bet == 0:
-          self._print('Your bet must be greater than 0')
-
-        else:
-          self._print('You can\'t bet more points than you have')
-
-      else:
-        self._print('Please enter an integer')
+    if value >= 1 and value <= current_bank:
+      self.user.place_bet(value)
 
 
   def deal(self):
@@ -231,31 +162,20 @@ class Game:
       self.user.hit(self.deck.deal())
       self.dealer.hit(self.deck.deal())
 
+  def user_hand(self):
+    return self.user.hand
 
-  def user_turn(self):
+  def dealer_hand(self):
+    return self.dealer.hand
+
+  def user_hit(self):
     """
     Handles the users decision to either hit and gain a card, or to stay and keep the cards they have.
     In: None
     Out: None
     """
-    while not self.user.bust():
-      self.save_game()
-      print('\n')
-      self._print(f'The Dealer shows:\n{repr(self.dealer)}\n')
-      self._print(f'Your hand is:\n{str(self.user)}\n')
-      self._print('Your current score is ', self.user.get_score())
-      hit_or_stay_input = self._input('Would you like to hit or stay? (h/s): ')
-
-      # If the player wants to exit they can
-      if hit_or_stay_input.lower() in self._valid_exit:
-        exit_game()
-
-      if hit_or_stay_input.lower() in self._valid_stay:
-        return
-      elif hit_or_stay_input in self._valid_hit:
-        self.user.hit(self.deck.deal())
-      else:
-        self._print('invalid input')
+    self.user.hit(self.deck.deal())
+    self.save_game()
 
 
 
@@ -279,28 +199,23 @@ class Game:
     In: None
     Out: Changes the value in the Player's bank
     """
-    print('\n')
-    self._print(f'Your last hand is:\n{str(self.user)}')
-    self._print(f'Your score is {self.user.get_score()}')
+
     if self.user.bust():
-      self._print('You have bust')
+
       self.user.beat_dealer(False)
+      return False
 
     else:
-      self._print(f'The Dealer\'s hand is:\n{str(self.dealer)}')
-      self._print(f'Dealer has {self.dealer.get_score()} points')
+
       if self.user.get_score() == self.dealer.get_score() and not self.dealer.bust():
-        self._print(f'It was a tie\nYou don\'t gain or lose points')
-        return
+
+        return None
 
       result = self.user.get_score() > self.dealer.get_score() or self.dealer.bust()
       self.user.beat_dealer(result)
-      if self.dealer.bust():
-        self._print('The Dealer bust')
-      if result:
-        self._print('You beat the Dealer')
-      else:
-        self._print('You lost this hand')
+
+      return result
+
 
 
   def reset_hands(self):
