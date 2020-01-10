@@ -21,7 +21,7 @@ class Game:
   _valid_stay = {'s', 'stay', 'stop'}
 
 
-  def __init__(self, print_func=print, input_func=input):
+  def __init__(self, print_func=print, input_func=input, dealer=None, user=None):
     """
     This is where most of the basic game set up should take place. Namely the creation of the deck as well as the dealer. For now we can also add the player.
     In: None
@@ -40,8 +40,8 @@ class Game:
     self.deck = Deck(deck_count=2)
 
     # Add the players that the game cares about
-    self.dealer = Dealer()
-    self.user = User(starting_bank = self.starting_bank)
+    self.dealer = dealer or Dealer()
+    self.user = user or User(starting_bank = self.starting_bank)
     self.round = 0
 
   def play(self):

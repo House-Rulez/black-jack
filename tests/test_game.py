@@ -1,6 +1,10 @@
 import pytest
 from scripts.game import Game
 
+from scripts.deck.card import Card
+from scripts.player.player import Dealer, User
+
+
 
 # Game instance
 
@@ -67,7 +71,6 @@ def test_game_intro(game):
 
 
 # Game difficulty
-
 
 def test_player_chooses_easy_difficulty(game):
   """
@@ -195,6 +198,7 @@ def test_player_bet(game):
   current_bank = 100
 
   prints = [
+
     f'Your current bank is {current_bank}',
     'how much would you like to bet?'
   ]
@@ -333,6 +337,54 @@ def test_player_exit(game):
 
   bet = game.place_user_bet(current_bank)
   assert bet == False
+
+
+# Game turn user_turn
+
+
+@pytest.mark.skip
+def test_user_turn_exit():
+  """
+  User can exit game while hitting.
+  """
+  pass
+
+
+@pytest.mark.skip
+def test_user_turn_stay():
+  """
+  User can stay and doesn't need to hit.
+  """
+  # user_hand = [Card(2), Card(10)]
+  # dealer_hand = [Card(11), Card(12)]
+  # user = User(user_hand)
+  # dealer = Dealer(dealer_hand)
+  # game = Game(mock_print, mock_input, dealer=dealer_hand, user=user_hand)
+
+  # prints = [
+  #   f'The Dealer shows:\n{repr(game.dealer)}\n',
+  #   f'Your hand is:\n{str(game.user)}\n',
+  # ]
+
+  # prompts =
+  pass
+
+
+
+@pytest.mark.skip
+def test_user_turn_hit():
+  """
+  User can hit.
+  """
+  pass
+
+
+@pytest.mark.skip
+def test_user_turn_bad_input():
+  """
+  User hit or stay input must be legal.
+  """
+  pass
 
 
 #################################################
