@@ -1,7 +1,9 @@
 import pytest
 from scripts.game import Game
+
 from scripts.deck.card import Card
 from scripts.player.player import Dealer, User
+
 
 
 # Game instance
@@ -69,7 +71,6 @@ def test_game_intro(game):
 
 
 # Game difficulty
-
 
 def test_player_chooses_easy_difficulty(game):
   """
@@ -197,6 +198,7 @@ def test_player_bet(game):
   current_bank = 100
 
   prints = [
+
     f'Your current bank is {current_bank}',
     'how much would you like to bet?'
   ]

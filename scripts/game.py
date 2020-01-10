@@ -76,6 +76,7 @@ class Game:
           self._print(f'You had no net gain over {self.round} rounds.')
         else:
           self._print(f'You amassed a max of {self.user.get_max_bank()} points over {self.round} rounds.')
+          exit_game()
 
         break
 
